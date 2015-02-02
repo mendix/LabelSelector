@@ -85,7 +85,7 @@ mendix.widget.declare("LabelSelect.widget.LabelSelect", {
                 }
             });
             var self = this;
-            var _refreshHandle = mx.data.subscribe({
+            this._refreshHandle = mx.data.subscribe({
                     guid     : obj.getGUID(),
                     callback : function(guid) {
                         while(self.currlabelNode.childNodes.length > 1)
@@ -298,5 +298,8 @@ mendix.widget.declare("LabelSelect.widget.LabelSelect", {
 
     uninitialize : function() { 
         mx.data.unsubscribe(this._refreshHandle);
+        if (this.labelAssignInput) {
+			this.labelAssignInput.destroy();
+		}
     }
 });
