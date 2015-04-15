@@ -32,14 +32,6 @@ RU5ErkJggg==</icon>
 		<attributeType name="String"/> 
 	  </attributeTypes>
 	</property>
-<!-- 	<property key="detailAttrib" type="attribute" isPath="yes" pathType="referenceSet" required="false">
-	  <caption>Details Attribute</caption>
-	  <category>Data source</category>
-	  <description>Optional details attribute</description>
-	  <attributeTypes>
-		<attributeType name="String"/> 
-	  </attributeTypes>
-	</property> -->
 	<property key="tagConstraint" type="entityConstraint" required="false" entityProperty="tagAssoc">
 	  <caption>Label constraint</caption>
 	  <category>Data source</category>
@@ -49,6 +41,16 @@ RU5ErkJggg==</icon>
 	  <caption>Enable create</caption>
 	  <category>Behavior</category>
 	  <description>Enable creating new labels.</description>
+	</property>
+	<property key="readOnly" type="boolean" defaultValue='false'>
+	  <caption>Read Only</caption>
+	  <category>Behavior</category>
+	  <description>Make the widget read only.</description>
+	</property>
+	<property key="showAutoCompleteOnFocus" type="boolean" defaultValue='false'>
+	  <caption>Show Labels</caption>
+	  <category>Behavior</category>
+	  <description>Show available labels on focus.</description>
 	</property>
 	<property key="aftercreatemf" type="microflow" required="false">
 		<caption>After create label</caption>

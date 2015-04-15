@@ -1,302 +1,347 @@
-dojo.provide("LabelSelect.widget.LabelSelect");
-    
-dojo.require("dojo.data.util.simpleFetch");
-dojo.require("dijit.form.ComboBox");
+/*jslint white:true, nomen: true, plusplus: true */
+/*global mx, define, require, browser, devel, console, logger */
+/*mendix */
+/*
+    LabelSelect
+    ========================
 
-mendix.widget.declare("LabelSelect.widget.LabelSelect", {
-    addons: [dijit._Contained],
-    inputargs: {
-        tagAssoc : '',
-        tagAttrib : '',
-        detailAttrib : '',
-        tagConstraint : '',
-        aftercreatemf : '',
-        onchangemf : '',
-        enableCreate : true,
-    },
-    
-    existingLabels : null,
-    currlabelNode : null,
-    currLabels : null,
-    tagAttr : null,
-    container : null,
-    firststartup : false,
+    @file      : LabelSelect.js
+    @version   : 2.0
+    @author    : Pauline Oudeman
+    @date      : Tue, 14 Apr 2015 09:36:23 GMT
+    @copyright : 
+    @license   : 
 
-    startup : function() {
-        if (!this.firststartup) {
-            this.firststartup = true;
-            this.assoc = this.tagAssoc.split('/');
-            this.tagAttr = this.tagAttrib.split('/')[2];
-            this.existingLabels = {};
-            this.currLabels = [];
-            
-            this.labelStore = dojo.mixin({
-
-                _fetchItems : dojo.hitch(this, function(query, resultcallback){
-                    var results = [];
-                    var q = query.query.name.toLowerCase().replace(/^\*|\*$/g,'');  //remove surronding asterixes from the queryexpr
-
-                    if (this.existingLabels != null) {
-                        for(key in this.existingLabels) {
-                            var lowkey = key.toLowerCase() ;
-                            
-                            if (q == "" || lowkey.indexOf(q) > -1) {
-                                results.push(this.existingLabels[key]);
-                            }
-                        }
-                    }
-                    resultcallback(results, query);
-                }),
-
-                getValue : dojo.hitch(this, function(item, _) {
-                   return item.get(this.tagAttr);                
-                })
-
-            }, dojo.data.util.simpleFetch);
-            
-            this.renderSelector();
-
-            this.connect(this.domNode, 'onclick', dojo.hitch(this, function(e) {
-                if (this.labelAssignInput) {
-                    this.labelAssignInput.focus();
-                }
-                e && dojo.stopEvent(e);
-                return false;
-            }));
-        }
-
-        this.actRendered();
-    },
-    
-    update : function (obj, callback) {
-        if (obj != null) {
-            if(this._refreshHandle){
-                mx.data.unsubscribe(this._refreshHandle);
-            } 
-            var constraint = '//'+this.assoc[1]+(this.tagConstraint.replace('[%CurrentObject%]', obj.getGUID()));
-            this.parentObj = obj;
-            mx.processor.get({
-                xpath : constraint,
-                callback : dojo.hitch(this, this.processTags),
-                error : function (e) {console.log('Error in LabelSelect: ', e)},
-                filter : {
-                    attributes : this.detailAttrib ? [this.tagAttr, this.detailAttrib.split("/")[2]] : [ this.tagAttr ],
-                    sort : [[this.tagAttr, 'asc']]
-                }
-            });
-            var self = this;
-            var _refreshHandle = mx.data.subscribe({
-                    guid     : obj.getGUID(),
-                    callback : function(guid) {
-                        while(self.currlabelNode.childNodes.length > 1)
-                            dojo.destroy(self.currlabelNode.childNodes[0]);
-                        self.update(obj, callback);
-                    }
-            });
-
-        } else {
-            while(this.currlabelNode.childNodes.length > 1)
-                dojo.destroy(this.currlabelNode.childNodes[0]);
-
-            this.currLabels = [];
-        }
-        callback && callback();
-    },
-    
-    processTags : function (objects) {
-        this.currLabels = [];
-        var refObjs = this.parentObj.get(this.assoc[0]);
-        dojo.forEach(objects, function (lab, i) {
-            this.existingLabels[lab.get(this.tagAttr)] = lab;
-            dojo.forEach(refObjs, function (ref, i) {
-                if (ref === lab.getGUID())
-                    this.currLabels.push(lab);
-            }, this);
-        }, this);
-        
-        while(this.currlabelNode.childNodes.length > 1)
-            dojo.destroy(this.currlabelNode.childNodes[0]);
-
-        dojo.forEach(this.currLabels, dojo.hitch(this, this.renderLabel));
-        dojo.place(this.labelAssignInput.domNode, this.currlabelNode, 'last');
-    },
-    
-    renderSelector : function () {
-
-        this.container = mxui.dom.div({ 'class' : 'Label_container' });
-        var inputNode = document.createElement("input");//mxui.dom.input({'type' : 'text'});
-        inputNode.type = 'text';
-        inputNode.value = '';
-
-        this.currlabelNode = mxui.dom.div({ 'class' : 'Label_list' });
-
-        dojo.place(this.container, this.domNode);
-        dojo.place(this.currlabelNode, this.container);
-        dojo.place(inputNode, this.container);
-
-        //return;
-        this.labelAssignInput =  new dijit.form.ComboBox({
-            store:this.labelStore,
-            queryExpr:"*${0}*",
-            searchAttr:'name',
-            searchDelay:0,
-            tabIndex:0,
-            ignoreCase: true,
-            'class' : 'LabelSelect_combo',
-            hasDownArrow:true,
-            autoComplete:false,
-            labelType : 'html',
-/* MWE: doesn't seem to work :-( 
-            labelType : 'text', 
-            highlightMatch : 'all',
+    Documentation
+    ========================
+    Describe your widget here.
 */
 
-            onBlur : dojo.hitch(this, function (e) {
-                if (this.IEBlurBoolean && dojo.isIE) {
-                    mxui.wm.focus.put(this.labelAssignInput.textbox);
+// Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
+require({
+    packages: [{
+        name: 'jquery',
+        location: '../../widgets/LabelSelect/lib',
+        main: 'jquery-1.11.2.min'
+    },
+               {
+                   name: 'jquery-ui',
+                   location: '../../widgets/LabelSelect/lib',
+                   main: 'jquery-ui-1104-min'
+               },
+               {
+                   name: 'tag-it',
+                   location: '../../widgets/LabelSelect/lib',
+                   main: 'tag-it'
+               }
+
+              ]
+}, [
+    'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
+    'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text',
+    'jquery', 'jquery-ui', 'tag-it', 'dojo/text!LabelSelect/widget/template/LabelSelect.html'
+], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, $, jQueryUI, tagit, widgetTemplate) {
+    'use strict';
+
+    // Declare widget's prototype.
+    return declare('LabelSelect.widget.LabelSelect', [_WidgetBase, _TemplatedMixin], {
+        // _TemplatedMixin will create our dom node using this HTML template.
+        templateString: widgetTemplate,
+
+        // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
+        _handles: null,
+        _contextObj: null,
+        _listBox: null,
+        _tagEntity: null,
+        _tagAttribute: null,
+        _refAttribute: null,
+        _tagCache: null,
+
+        // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
+        constructor: function () {
+            this._handles = [];
+        },
+
+        // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
+        postCreate: function () {
+            console.log(this.id + '.postCreate');
+            //set the variables:
+            this._tagEntity = this.tagAssoc.split('/')[1];
+            this._refAttribute = this.tagAssoc.split('/')[0];
+            this._tagAttribute = this.tagAttrib.split('/')[2];
+            this._tagCache = {}; //we need this to set references easily.
+
+            this._listBox = domConstruct.create('ul', {
+                'id': this.id + '_ListBox'
+            });
+            domConstruct.place(this._listBox, this.domNode);
+
+            this._setupEvents();
+        },
+
+        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
+        update: function (obj, callback) {
+            console.log(this.id + '.update');
+
+            this._contextObj = obj;
+            this._fetchCurrentLabels();
+            this._resetSubscriptions();
+
+            callback();
+        },
+
+        // mxui.widget._WidgetBase.enable is called when the widget should enable editing. Implement to enable editing if widget is input widget.
+        enable: function () {
+
+        },
+
+        // mxui.widget._WidgetBase.enable is called when the widget should disable editing. Implement to disable editing if widget is input widget.
+        disable: function () {
+
+        },
+
+        // mxui.widget._WidgetBase.resize is called when the page's layout is recalculated. Implement to do sizing calculations. Prefer using CSS instead.
+        resize: function (box) {
+
+        },
+
+        // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
+        uninitialize: function () {
+            // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
+        },
+
+        _setupEvents: function () {
+
+        },
+
+        _fetchCurrentLabels: function () {
+             console.log(this.id + '._fetchCurrentLabels');
+            //fetch all referenced labels
+            var xpath = '//' + this._tagEntity + this.tagConstraint.replace('[%CurrentObject%]', this._contextObj.getGuid());
+            mx.data.get({
+                xpath    : xpath,
+                callback : lang.hitch(this, this._processTags)
+            });
+        },
+
+
+        _processTags: function (objs) {
+             console.log(this.id + '._processTags');
+            var refObjs = this._contextObj.get(this._refAttribute),
+                tagArray = [],
+                currentTags = [];
+            dojoArray.forEach(objs, function (tagObj, index) {
+                //clean up the text
+                var value = dom.escapeString(tagObj.get(this._tagAttribute));
+                //add tag to cache based on value
+                this._tagCache[value] = tagObj;
+                //check if this is a current tag
+                dojoArray.forEach(refObjs, function (ref, i) {
+                    if (ref === tagObj.getGUID()){
+                        currentTags.push(tagObj);
+                    }
+                }, this);
+                //push the value to the array.
+                tagArray.push(value);
+            }, this);
+
+            this._setOptions(tagArray);
+            this._renderCurrentTags(currentTags);
+        },
+
+        _renderCurrentTags: function (currentTags) {
+             console.log(this.id + '._renderCurrentTags');
+            //we're not using the plugin function "remove all" because we don't want to remove references
+            var items = this._listBox.getElementsByTagName("li");
+            while (items.length > 0) {
+                //delete the all tags except the "input" field
+                if (!domClass.contains(items[0], 'tagit-new')) {
+                    domConstruct.destroy(items[0]);
                 }
-                this.IEBlurBoolean = false;
-            }),
+                //break if we're at the last item and this item is the input field 
+                if (items.length === 1 && domClass.contains(items[0], 'tagit-new')) {
+                    break;
+                }
+            }
+            
+            //create a tag for all items
+            dojoArray.forEach(currentTags, function (tagObj, index) {
+                var value = dom.escapeString(tagObj.get(this._tagAttribute));
+                $('#' + this.id + '_ListBox').tagit("createTag", value);
+            }, this);
+        },
 
-            onKeyPress : dojo.hitch(this, function(e) {
-                if (e.keyCode == dojo.keys.TAB || e.keyCode == dojo.keys.ENTER) {
-                    if (this.labelAssignInput.getValue() != '') {
-                        dojo.stopEvent(e);
-                        this.IEBlurBoolean = true;
+        _startTagger: function (options) {
+             console.log(this.id + '._startTagger');
+            if (options) {
+                $('#' + this.id + '_ListBox').tagit(options);
+            } else {
+                //fallback
+                logger.warn('No options found, running defaults');
+                $('#' + this.id + '_ListBox').tagit();
+            }
+        },
 
-                        if (this.labelAssignInput.item!= null) { //do not tab away if tab is used to select an item
-                            this.addLabel(this.labelAssignInput.item);
-                        } else {
-                            if(this.enableCreate){
-                               this.createLabel(dojo.trim(this.labelAssignInput.getValue())); 
+
+        _createTagobject: function (value) {
+             console.log(this.id + '._createTagobject');
+            //create a new tag
+            mx.data.create({
+                entity: this._tagEntity,
+                callback: function (obj) {
+                    //set the value
+                    obj.set(this._tagAttribute, value);
+                    //save
+                    mx.data.save({
+                        mxobj: obj,
+                        callback: function () {
+                            //run the after create mf
+                            if (this.aftercreatemf) {
+                                this._execMf(this._contextObj.getGuid(), this.aftercreatemf, function () {
+                                    this._contextObj.addReference(this._refAttribute, obj.getGuid());
+                                    this._saveObject();
+                                });
+                            } else {
+                                this._contextObj.addReference(this._refAttribute, obj.getGuid());
+                                this._saveObject();
                             }
+
+                        }
+                    }, this);
+                },
+                error: function (e) {
+                    logger.error('Error creating object: ' + e);
+                }
+            }, this);
+        },
+
+        _execMf : function(guid, mf, cb) {
+             console.log(this.id + '._execMf');
+            if(guid && mf){
+                mx.data.action({
+                    applyto : 'selection',
+                    actionname : mf,
+                    guids: [guid], 
+                    callback : function(){
+                        if(cb){
+                            cb();
+                        }
+                    }, 
+                    error : function(e) {
+                        logger.error('Error running Microflow: ' + e);
+                    }
+                }, this);
+            }
+
+        },
+
+
+        _resetSubscriptions: function () {
+             console.log(this.id + '._resetSubscriptions');
+            // Release handle on previous object, if any.
+            var handle = null;
+            if (this._handles) {
+                dojoArray.forEach(this._handles, function (handle) {
+                    this.unsubscribe(handle);
+                });
+                this._handles = [];
+            }
+
+            if (this._contextObj) {
+                handle = this.subscribe({
+                    guid: this._contextObj.getGuid(),
+                    callback: function (guid) {
+                        mx.data.get({
+                            guid: guid,
+                            callback: lang.hitch(this, function (obj) {
+                                this._contextObj = obj;
+                                this._fetchCurrentLabels();
+                            })
+                        });
+
+                    }
+                });
+                this._handles.push(handle);
+            }
+        },
+
+        _isReference: function (guid) {
+             console.log(this.id + '._isReference');
+            var isRef = false,
+                refs = this._contextObj.getReferences(this._refAttribute);
+            dojoArray.forEach(refs, function (ref, i) {
+                if (ref === guid) {
+                    isRef = true;
+                }
+            });
+
+            return isRef;
+        },
+
+        _saveObject: function () {
+             console.log(this.id + '._saveObject');
+            mx.data.save({
+                mxobj: this._contextObj,
+                callback: function () {
+                    this._execMf(this._contextObj.getGuid(), this.onchangemf);
+                }
+            }, this);
+        },
+
+
+        _setOptions: function (tagArray) {
+             console.log(this.id + '._setOptions');
+            //TODO: allow users to set options
+            var self = this,
+                options = {
+                    availableTags: tagArray,
+                    autocomplete: {
+                        delay: 0,
+                        minLength: 0
+                    },
+                    enableCreate: self.enableCreate,
+                    showAutocompleteOnFocus: self.showAutoCompleteOnFocus,
+                    removeConfirmation: false,
+                    caseSensitive: true,
+                    allowDuplicates: false,
+                    allowSpaces: false,
+                    readOnly: self.readOnly,
+                    tagLimit: null,
+                    singleField: false,
+                    singleFieldDelimiter: ',',
+                    singleFieldNode: null,
+                    tabIndex: null,
+                    placeholderText: null,
+
+                    afterTagAdded: function (event, ui) {
+                        //fetch tag from cache
+                        var tagObj = self._tagCache[ui.tagLabel];
+                        if (tagObj) {
+                            //check if already a reference
+                            if (!self._isReference(tagObj.getGuid())) {
+                                self._contextObj.addReference(self._refAttribute, tagObj.getGuid());
+                                self._saveObject();
+                            }
+                        } else if (self.enableCreate) {
+                            self._createTagobject(ui.tagLabel);
+                        } else {
+                            logger.warn('No Tag found for value: ' + ui.tagLabel);
+                        }
+                    },
+
+                    afterTagRemoved: function (event, ui) {
+                        //fetch tag from cache
+                        var tagObj = self._tagCache[ui.tagLabel];
+                        if (tagObj) {
+                            self._contextObj.removeReferences(self._refAttribute, [tagObj.getGuid()]);
+                            self._saveObject();
+                        } else {
+                            logger.warn('No Tag found for value: ' + ui.tagLabel);
                         }
                     }
-                }
-            }),
-
-            onChange : dojo.hitch(this, function(e) {
-                if (this.labelAssignInput.item != null)
-                    this.addLabel(this.labelAssignInput.item);
-                else if (dojo.trim(this.labelAssignInput.getValue()).length > 0 && this.enableCreate){
-                    this.createLabel(dojo.trim(this.labelAssignInput.getValue())); 
-                }
-            }),
-
-            labelFunc : dojo.hitch(this, function(item) {
-                var str = "<span class='labelselect-dropdown-name'>" + mxui.dom.escapeHTML(item.get(this.tagAttr)) + "&nbsp;</span>";
-                    if (this.detailAttrib)
-                        str += "<span class='labelselect-dropdown-detail'>"  + mxui.dom.escapeHTML(item.get(this.detailAttrib.split("/")[2])) + "</span>";
-                return str;
-            })
-        }, inputNode);
-
-        
-    },
-    
-    renderLabel : function (obj, i) {
-        var containdiv = mendix.dom.div({ 'class' : 'LabelSelect_LabelContainer tg_column_tags'});
-        var removeNode = mxui.dom.span({'class' : 'LabelSelect_remove tg_label_remove'}, 'x');
-        this.connect(removeNode, 'onmouseenter', dojo.hitch(this, this.nodeHover, removeNode, true));
-        this.connect(removeNode, 'onmouseleave', dojo.hitch(this, this.nodeHover, removeNode, false));
-        this.connect(removeNode, 'onclick', dojo.hitch(this, this.removeLabel, obj, containdiv));
-
-        var labelnode = mxui.dom.span({'class' : 'LabelSelect_label tg_label'}, obj.get(this.tagAttr));
-
-        this.connect(labelnode, 'onmouseenter', dojo.hitch(this, this.nodeHover, labelnode, true));
-        this.connect(labelnode, 'onmouseleave', dojo.hitch(this, this.nodeHover, labelnode, false));
-        
-        containdiv.appendChild(labelnode);
-        labelnode.appendChild(removeNode);
-        dojo.place(containdiv, this.currlabelNode, 'last');
-        dojo.place(this.labelAssignInput.domNode, this.currlabelNode, 'last'); //always as last!
-    },
-    
-    removeLabel : function (label, node, clickevt) {
-        this.parentObj.removeReferences(this.assoc[0], [label.getGUID()]);
-        dojo.destroy(node);
-        this.currLabels.splice(dojo.indexOf(this.currLabels, label),1);
-        mx.processor.save({
-            mxobj : this.parentObj,
-            callback : function () {
-                this.execMF(this.onchangemf, this.parentObj, function () {});
-            },
-            error : function (e) {logger.error(e);}
-        }, this);
-    },
-    
-    nodeHover : function (node, add) {
-        if (add === true)
-            dojo.addClass(node, 'hover');
-        else
-            dojo.removeClass(node, 'hover');
-    },
-    
-    addLabel : function (label, callback) {
-        // Check if not already in
-        this.labelAssignInput.set('value', '');
-        if (dojo.indexOf(this.currLabels, label) > -1)
-            return;
-        
-        this.labelAssignInput.set('value', '');
-        
-        this.parentObj.addReferences(this.assoc[0], [label.getGUID()]);
-        mx.processor.save({
-            mxobj : this.parentObj,
-            callback : function () {
-                this.execMF(this.onchangemf, this.parentObj, function () {});
-            },
-            error : function (e) {logger.error(e);}
-        }, this);
-        this.currLabels.push(label);
-        if (!this.existingLabels[label.get(this.tagAttr)])
-            this.existingLabels[label.get(this.tagAttr)] = label;
-        this.renderLabel(label);
-        this.labelAssignInput.focus();
-        callback && callback();
-    },
-    
-    createLabel : function (labelname) {
-        if (labelname === '')
-            return;
-        
-        for(var key in this.existingLabels) {
-            if (dojo.trim(key.toLowerCase()) == dojo.trim(labelname.toLowerCase())) {
-                this.addLabel(this.existingLabels[key]);
-                return;
-            }
+                };
+            this._startTagger(options);
         }
-        
-        this.labelAssignInput.set('value', '');
-        mx.processor.create({
-            entity : this.assoc[1],
-            callback : function (newlabel) {
-                newlabel.set(this.tagAttr, dojo.trim(labelname));
-                mx.processor.commit({
-                    mxobj : newlabel,
-                    callback : dojo.hitch(this, function (label) {
-                        this.addLabel(label, dojo.hitch(this, this.execMF, this.aftercreatemf, this.parentObj));
-                    }, newlabel)
-                });
-            }
-        }, this);
-    },
-    
-    execMF : function (mf, obj) {
-        if (mf !== '') {
-            mx.processor.xasAction({
-                error       : function() {
-                    logger.error(this.id + "error: XAS error executing microflow");
-                },
-                callback    : function () {},
-                actionname  : mf,
-                applyto     : 'selection',
-                guids       : [obj.getGUID()]
-            });
-        }
-    }, 
 
-    uninitialize : function() { 
-        mx.data.unsubscribe(this._refreshHandle);
-    }
+    });
 });
