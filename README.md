@@ -3,6 +3,7 @@
 With this widget you can easily create/assign/remove objects (f. ex. labels) to/from an object.
 
 It features both an inputbox for searching (and optionally creating if not found) and a dropdown to select already existing objects.
+The implementation is based on the Tag-it library
 
 ## Contributing
 For more information on contributing to this repository visit [Contributing to a GitHub repository] (https://world.mendix.com/display/howto50/Contributing+to+a+GitHub+repository)
