@@ -20,19 +20,19 @@
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 require({
     packages: [{
-        name: 'jquery',
-        location: '../../widgets/LabelSelect/lib',
-        main: 'jquery-1.11.2.min'
+            name: 'jquery',
+            location: '../../widgets/LabelSelect/lib',
+            main: 'jquery-1.11.2.min'
     },
-               {
-                   name: 'jquery-ui',
-                   location: '../../widgets/LabelSelect/lib',
-                   main: 'jquery-ui-1104-min'
+        {
+            name: 'jquery-ui',
+            location: '../../widgets/LabelSelect/lib',
+            main: 'jquery-ui-1104-min'
                },
-               {
-                   name: 'tag-it',
-                   location: '../../widgets/LabelSelect/lib',
-                   main: 'tag-it'
+        {
+            name: 'tag-it',
+            location: '../../widgets/LabelSelect/lib',
+            main: 'tag-it'
                }
 
               ]
@@ -82,11 +82,11 @@ require({
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
             console.log(this.id + '.update');
-
-            this._contextObj = obj;
-            this._fetchCurrentLabels();
-            this._resetSubscriptions();
-
+            if (obj) {
+                this._contextObj = obj;
+                this._fetchCurrentLabels();
+                this._resetSubscriptions();
+            }
             callback();
         },
 
@@ -115,18 +115,18 @@ require({
         },
 
         _fetchCurrentLabels: function () {
-             console.log(this.id + '._fetchCurrentLabels');
+            console.log(this.id + '._fetchCurrentLabels');
             //fetch all referenced labels
             var xpath = '//' + this._tagEntity + this.tagConstraint.replace('[%CurrentObject%]', this._contextObj.getGuid());
             mx.data.get({
-                xpath    : xpath,
-                callback : lang.hitch(this, this._processTags)
+                xpath: xpath,
+                callback: lang.hitch(this, this._processTags)
             });
         },
 
 
         _processTags: function (objs) {
-             console.log(this.id + '._processTags');
+            console.log(this.id + '._processTags');
             var refObjs = this._contextObj.get(this._refAttribute),
                 tagArray = [],
                 currentTags = [];
@@ -137,7 +137,7 @@ require({
                 this._tagCache[value] = tagObj;
                 //check if this is a current tag
                 dojoArray.forEach(refObjs, function (ref, i) {
-                    if (ref === tagObj.getGUID()){
+                    if (ref === tagObj.getGUID()) {
                         currentTags.push(tagObj);
                     }
                 }, this);
@@ -150,7 +150,7 @@ require({
         },
 
         _renderCurrentTags: function (currentTags) {
-             console.log(this.id + '._renderCurrentTags');
+            console.log(this.id + '._renderCurrentTags');
             //we're not using the plugin function "remove all" because we don't want to remove references
             var items = this._listBox.getElementsByTagName("li");
             while (items.length > 0) {
@@ -163,7 +163,7 @@ require({
                     break;
                 }
             }
-            
+
             //create a tag for all items
             dojoArray.forEach(currentTags, function (tagObj, index) {
                 var value = dom.escapeString(tagObj.get(this._tagAttribute));
@@ -172,7 +172,7 @@ require({
         },
 
         _startTagger: function (options) {
-             console.log(this.id + '._startTagger');
+            console.log(this.id + '._startTagger');
             if (options) {
                 $('#' + this.id + '_ListBox').tagit(options);
             } else {
@@ -184,7 +184,7 @@ require({
 
 
         _createTagobject: function (value) {
-             console.log(this.id + '._createTagobject');
+            console.log(this.id + '._createTagobject');
             //create a new tag
             mx.data.create({
                 entity: this._tagEntity,
@@ -215,19 +215,19 @@ require({
             }, this);
         },
 
-        _execMf : function(guid, mf, cb) {
-             console.log(this.id + '._execMf');
-            if(guid && mf){
+        _execMf: function (guid, mf, cb) {
+            console.log(this.id + '._execMf');
+            if (guid && mf) {
                 mx.data.action({
-                    applyto : 'selection',
-                    actionname : mf,
-                    guids: [guid], 
-                    callback : function(){
-                        if(cb){
+                    applyto: 'selection',
+                    actionname: mf,
+                    guids: [guid],
+                    callback: function () {
+                        if (cb) {
                             cb();
                         }
-                    }, 
-                    error : function(e) {
+                    },
+                    error: function (e) {
                         logger.error('Error running Microflow: ' + e);
                     }
                 }, this);
@@ -237,9 +237,12 @@ require({
 
 
         _resetSubscriptions: function () {
-             console.log(this.id + '._resetSubscriptions');
+            console.log(this.id + '._resetSubscriptions');
             // Release handle on previous object, if any.
-            var handle = null;
+            var handle = null,
+                attrHandle = null,
+                validationHandle= null;
+
             if (this._handles) {
                 dojoArray.forEach(this._handles, function (handle) {
                     this.unsubscribe(handle);
@@ -261,12 +264,35 @@ require({
 
                     }
                 });
+                attrHandle = mx.data.subscribe({
+                    guid: this._contextObj.getGuid(),
+                    attr: this._refAttribute,
+                    callback: lang.hitch(this, function (guid) {
+                        mx.data.get({
+                            guid: guid,
+                            callback: lang.hitch(this, function (obj) {
+                                this._contextObj = obj;
+                                this._fetchCurrentLabels();
+                            })
+                        });
+                    })
+                });
+
+
+                validationHandle = mx.data.subscribe({
+                    guid: this._contextObj.getGuid(),
+                    val: true,
+                    callback: lang.hitch(this, this._handleValidation)
+                });
+
                 this._handles.push(handle);
+                this._handles.push(attrHandle);
+                this._handles.push(validationHandle);
             }
         },
 
         _isReference: function (guid) {
-             console.log(this.id + '._isReference');
+            console.log(this.id + '._isReference');
             var isRef = false,
                 refs = this._contextObj.getReferences(this._refAttribute);
             dojoArray.forEach(refs, function (ref, i) {
@@ -279,7 +305,7 @@ require({
         },
 
         _saveObject: function () {
-             console.log(this.id + '._saveObject');
+            console.log(this.id + '._saveObject');
             mx.data.save({
                 mxobj: this._contextObj,
                 callback: function () {
@@ -290,7 +316,7 @@ require({
 
 
         _setOptions: function (tagArray) {
-             console.log(this.id + '._setOptions');
+            console.log(this.id + '._setOptions');
             //TODO: allow users to set options
             var self = this,
                 options = {
@@ -314,6 +340,7 @@ require({
                     placeholderText: null,
 
                     afterTagAdded: function (event, ui) {
+                        self._clearValidations();
                         //fetch tag from cache
                         var tagObj = self._tagCache[ui.tagLabel];
                         if (tagObj) {
@@ -330,6 +357,7 @@ require({
                     },
 
                     afterTagRemoved: function (event, ui) {
+                        self._clearValidations();
                         //fetch tag from cache
                         var tagObj = self._tagCache[ui.tagLabel];
                         if (tagObj) {
@@ -341,6 +369,37 @@ require({
                     }
                 };
             this._startTagger(options);
+        },
+        
+        _handleValidation: function (validations) {
+
+            this._clearValidations();
+
+            var val = validations[0],
+                msg = val.getReasonByAttribute(this._refAttribute);
+
+            if (this.readOnly) {
+                val.removeAttribute(this._refAttribute);
+            } else {
+                if (msg) {
+                    this._addValidation(msg);
+                    val.removeAttribute(this._refAttribute);
+                }
+            }
+        },
+
+        _clearValidations: function () {
+            domConstruct.destroy(this._alertdiv);
+        },
+
+        _addValidation: function (msg) {
+            this._alertdiv = domConstruct.create("div", {
+                class: 'alert alert-danger',
+                innerHTML: msg
+            });
+
+            this.domNode.appendChild(this._alertdiv);
+
         }
 
     });
