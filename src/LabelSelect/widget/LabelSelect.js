@@ -83,9 +83,13 @@ require({
         update: function (obj, callback) {
             console.log(this.id + '.update');
             if (obj) {
+                domStyle.set(this.domNode, "visibility", "visible");
+                
                 this._contextObj = obj;
                 this._fetchCurrentLabels();
                 this._resetSubscriptions();
+            } else {
+                domStyle.set(this.domNode, "visibility", "hidden");
             }
             callback();
         },
