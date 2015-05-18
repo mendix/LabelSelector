@@ -18,18 +18,13 @@
 */
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
-require({
-    packages: [{
-            name: 'jquery',
-            location: '../../widgets/LabelSelect/lib',
-            main: 'jquery-1.11.2.min'
-    }]
-}, [
+define([
     'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
     'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text',
-    'jquery', 'dojo/text!LabelSelect/widget/template/LabelSelect.html'
-], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, $, widgetTemplate) {
+    'LabelSelect/lib/jquery-1.11.2.min', 'dojo/text!LabelSelect/widget/template/LabelSelect.html'
+], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, _jQuery, widgetTemplate) {
     'use strict';
+    var $ = jQuery.noConflict(true);
 
     // Declare widget's prototype.
     return declare('LabelSelect.widget.LabelSelect', [_WidgetBase, _TemplatedMixin], {
@@ -386,7 +381,7 @@ require({
 
         _addValidation: function (msg) {
             this._alertdiv = domConstruct.create("div", {
-                class: 'alert alert-danger',
+                'class': 'alert alert-danger',
                 innerHTML: msg
             });
 
@@ -395,4 +390,8 @@ require({
         }
 
     });
+});
+
+require(['LabelSelect/widget/LabelSelect'], function () {
+'use strict';
 });
