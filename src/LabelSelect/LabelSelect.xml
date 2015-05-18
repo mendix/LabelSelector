@@ -55,7 +55,7 @@ RU5ErkJggg==</icon>
 	<property key="aftercreatemf" type="microflow" required="false">
 		<caption>After create label</caption>
 		<category>Interaction</category>
-		<description></description>
+		<description>Important: use this to commit your newly created labels!</description>
 		<returnType type="Void"/>
 	</property>
 	<property key="onchangemf" type="microflow" required="false">
