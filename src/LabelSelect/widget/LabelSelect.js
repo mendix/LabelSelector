@@ -23,24 +23,12 @@ require({
             name: 'jquery',
             location: '../../widgets/LabelSelect/lib',
             main: 'jquery-1.11.2.min'
-    },
-        {
-            name: 'jquery-ui',
-            location: '../../widgets/LabelSelect/lib',
-            main: 'jquery-ui-1104-min'
-               },
-        {
-            name: 'tag-it',
-            location: '../../widgets/LabelSelect/lib',
-            main: 'tag-it'
-               }
-
-              ]
+    }]
 }, [
     'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
     'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text',
-    'jquery', 'jquery-ui', 'tag-it', 'dojo/text!LabelSelect/widget/template/LabelSelect.html'
-], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, $, jQueryUI, tagit, widgetTemplate) {
+    'jquery', 'dojo/text!LabelSelect/widget/template/LabelSelect.html'
+], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, $, widgetTemplate) {
     'use strict';
 
     // Declare widget's prototype.
