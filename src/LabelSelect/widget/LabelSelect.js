@@ -21,10 +21,10 @@
 define([
     'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
     'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text',
-    'LabelSelect/lib/jquery-1.11.2.min', 'dojo/text!LabelSelect/widget/template/LabelSelect.html'
-], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, _jQuery, widgetTemplate) {
+    'LabelSelect/lib/jquery-1.11.2.min', 'LabelSelect/lib/jquery-ui.min', 'LabelSelect/lib/tagit', 'dojo/text!LabelSelect/widget/template/LabelSelect.html'
+], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, _jQuery, _jQueryUI, _tagit, widgetTemplate) {
     'use strict';
-    var $ = jQuery.noConflict(true);
+    var $ = _jQuery.noConflict(true);
 
     // Declare widget's prototype.
     return declare('LabelSelect.widget.LabelSelect', [_WidgetBase, _TemplatedMixin], {
