@@ -1,23 +1,7 @@
 /*jslint white:true, nomen: true, plusplus: true */
 /*global mx, define, require, browser, devel, console, logger */
 /*mendix */
-/*
-    LabelSelect
-    ========================
 
-    @file      : LabelSelect.js
-    @version   : 2.0
-    @author    : Pauline Oudeman
-    @date      : Tue, 14 Apr 2015 09:36:23 GMT
-    @copyright : 
-    @license   : 
-
-    Documentation
-    ========================
-    Describe your widget here.
-*/
-
-// Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define([
     'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
     'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text',
