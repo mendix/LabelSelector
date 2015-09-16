@@ -31,7 +31,7 @@ define([
 
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
-            console.log(this.id + '.postCreate');
+            //console.log(this.id + '.postCreate');
             //set the variables:
             this._tagEntity = this.tagAssoc.split('/')[1];
             this._refAttribute = this.tagAssoc.split('/')[0];
@@ -48,10 +48,10 @@ define([
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
-            console.log(this.id + '.update');
+            //console.log(this.id + '.update');
             if (obj) {
                 domStyle.set(this.domNode, "visibility", "visible");
-                
+
                 this._contextObj = obj;
                 this._fetchCurrentLabels();
                 this._resetSubscriptions();
@@ -86,7 +86,7 @@ define([
         },
 
         _fetchCurrentLabels: function () {
-            console.log(this.id + '._fetchCurrentLabels');
+            //console.log(this.id + '._fetchCurrentLabels');
             //fetch all referenced labels
             var xpath = '//' + this._tagEntity + this.tagConstraint.replace('[%CurrentObject%]', this._contextObj.getGuid());
             mx.data.get({
@@ -97,7 +97,7 @@ define([
 
 
         _processTags: function (objs) {
-            console.log(this.id + '._processTags');
+            //console.log(this.id + '._processTags');
             var refObjs = this._contextObj.get(this._refAttribute),
                 tagArray = [],
                 currentTags = [];
@@ -121,7 +121,7 @@ define([
         },
 
         _renderCurrentTags: function (currentTags) {
-            console.log(this.id + '._renderCurrentTags');
+            //console.log(this.id + '._renderCurrentTags');
             //we're not using the plugin function "remove all" because we don't want to remove references
             var items = this._listBox.getElementsByTagName("li");
             while (items.length > 0) {
@@ -143,7 +143,7 @@ define([
         },
 
         _startTagger: function (options) {
-            console.log(this.id + '._startTagger');
+            //console.log(this.id + '._startTagger');
             if (options) {
                 $('#' + this.id + '_ListBox').tagit(options);
             } else {
@@ -155,7 +155,7 @@ define([
 
 
         _createTagobject: function (value) {
-            console.log(this.id + '._createTagobject');
+            //console.log(this.id + '._createTagobject');
             //create a new tag
             mx.data.create({
                 entity: this._tagEntity,
@@ -166,17 +166,13 @@ define([
                     mx.data.save({
                         mxobj: obj,
                         callback: function () {
+                            // save the label before calling the microflow to save the new label
+                            this._contextObj.addReference(this._refAttribute, obj.getGuid());
+                            this._saveObject();
                             //run the after create mf
                             if (this.aftercreatemf) {
-                                this._execMf(this._contextObj.getGuid(), this.aftercreatemf, function () {
-                                    this._contextObj.addReference(this._refAttribute, obj.getGuid());
-                                    this._saveObject();
-                                });
-                            } else {
-                                this._contextObj.addReference(this._refAttribute, obj.getGuid());
-                                this._saveObject();
+                                this._execMf(this._contextObj.getGuid(), this.aftercreatemf);
                             }
-
                         }
                     }, this);
                 },
@@ -187,7 +183,7 @@ define([
         },
 
         _execMf: function (guid, mf, cb) {
-            console.log(this.id + '._execMf');
+            //console.log(this.id + '._execMf');
             if (guid && mf) {
                 mx.data.action({
                     applyto: 'selection',
@@ -208,11 +204,11 @@ define([
 
 
         _resetSubscriptions: function () {
-            console.log(this.id + '._resetSubscriptions');
+            //console.log(this.id + '._resetSubscriptions');
             // Release handle on previous object, if any.
             var handle = null,
                 attrHandle = null,
-                validationHandle= null;
+                validationHandle = null;
 
             if (this._handles) {
                 dojoArray.forEach(this._handles, function (handle) {
@@ -263,7 +259,7 @@ define([
         },
 
         _isReference: function (guid) {
-            console.log(this.id + '._isReference');
+            //console.log(this.id + '._isReference');
             var isRef = false,
                 refs = this._contextObj.getReferences(this._refAttribute);
             dojoArray.forEach(refs, function (ref, i) {
@@ -276,7 +272,7 @@ define([
         },
 
         _saveObject: function () {
-            console.log(this.id + '._saveObject');
+            //console.log(this.id + '._saveObject');
             mx.data.save({
                 mxobj: this._contextObj,
                 callback: function () {
@@ -287,7 +283,7 @@ define([
 
 
         _setOptions: function (tagArray) {
-            console.log(this.id + '._setOptions');
+            //console.log(this.id + '._setOptions');
             //TODO: allow users to set options
             var self = this,
                 options = {
@@ -341,7 +337,7 @@ define([
                 };
             this._startTagger(options);
         },
-        
+
         _handleValidation: function (validations) {
 
             this._clearValidations();
@@ -377,5 +373,5 @@ define([
 });
 
 require(['LabelSelect/widget/LabelSelect'], function () {
-'use strict';
+    'use strict';
 });
