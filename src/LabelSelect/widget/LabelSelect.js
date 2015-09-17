@@ -172,6 +172,8 @@ define([
                             //run the after create mf
                             if (this.aftercreatemf) {
                                 this._execMf(this._contextObj.getGuid(), this.aftercreatemf);
+                            } else {
+                                console.log(this.id + ' - please add an after create mf to commit the object, otherwise ui is incorrectly displayed.');
                             }
                         }
                     }, this);
