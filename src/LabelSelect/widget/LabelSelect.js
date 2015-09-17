@@ -166,13 +166,17 @@ define([
                     mx.data.save({
                         mxobj: obj,
                         callback: function () {
-                            // save the label before calling the microflow to save the new label
-                            this._contextObj.addReference(this._refAttribute, obj.getGuid());
-                            this._saveObject();
                             //run the after create mf
                             if (this.aftercreatemf) {
+                                // save the label before calling the microflow to save the new label
+                                this._contextObj.addReference(this._refAttribute, obj.getGuid());
+                                this._saveObject();
                                 this._execMf(this._contextObj.getGuid(), this.aftercreatemf);
+                            } else {
+                                this._contextObj.addReference(this._refAttribute, obj.getGuid());
+                                this._saveObject();
                             }
+
                         }
                     }, this);
                 },
