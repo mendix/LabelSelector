@@ -210,11 +210,12 @@ define([
             // Release handle on previous object, if any.
             var handle = null,
                 attrHandle = null,
+				thisObj = this,
                 validationHandle = null;
 
             if (this._handles) {
                 dojoArray.forEach(this._handles, function (handle) {
-                    this.unsubscribe(handle);
+                    thisObj.unsubscribe(handle);
                 });
                 this._handles = [];
             }
