@@ -168,13 +168,12 @@ define([
         _resetSubscriptions: function () {
             var handle = null,
                 attrHandle = null,
-				thisObj = this,
                 validationHandle = null;
 
             if (this._handles && this._handles.length && this._handles.length > 0) {
-                dojoArray.forEach(this._handles, function (handle) {
-                    thisObj.unsubscribe(handle);
-                });
+                dojoArray.forEach(this._handles, lang.hitch(this, function (handle) {
+                    this.unsubscribe(handle);
+                }));
                 this._handles = [];
             }
 
