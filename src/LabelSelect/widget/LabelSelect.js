@@ -41,7 +41,7 @@ define([
         update: function (obj, callback) {
             if (obj) {
                 domStyle.set(this.domNode, "visibility", "visible");
-                
+
                 this._contextObj = obj;
                 this._fetchCurrentLabels();
                 this._resetSubscriptions();
@@ -128,17 +128,15 @@ define([
                     mx.data.save({
                         mxobj: obj,
                         callback: function () {
+                            // save the label before calling the microflow to save the new label
+                            this._contextObj.addReference(this._refAttribute, obj.getGuid());
+                            this._saveObject();
                             //run the after create mf
                             if (this.aftercreatemf) {
-                                this._execMf(this._contextObj.getGuid(), this.aftercreatemf, function () {
-                                    this._contextObj.addReference(this._refAttribute, obj.getGuid());
-                                    this._saveObject();
-                                });
+                                this._execMf(this._contextObj.getGuid(), this.aftercreatemf);
                             } else {
-                                this._contextObj.addReference(this._refAttribute, obj.getGuid());
-                                this._saveObject();
+                                console.log(this.id + ' - please add an after create mf to commit the object, otherwise ui is incorrectly displayed.');
                             }
-
                         }
                     }, this);
                 },
@@ -170,11 +168,12 @@ define([
         _resetSubscriptions: function () {
             var handle = null,
                 attrHandle = null,
-                validationHandle= null;
+				thisObj = this,
+                validationHandle = null;
 
             if (this._handles && this._handles.length && this._handles.length > 0) {
                 dojoArray.forEach(this._handles, function (handle) {
-                    this.unsubscribe(handle);
+                    thisObj.unsubscribe(handle);
                 });
                 this._handles = [];
             }
@@ -296,7 +295,7 @@ define([
                 };
             this._startTagger(options);
         },
-        
+
         _handleValidation: function (validations) {
             this._clearValidations();
 
@@ -329,5 +328,5 @@ define([
 });
 
 require(['LabelSelect/widget/LabelSelect'], function () {
-'use strict';
+    'use strict';
 });
