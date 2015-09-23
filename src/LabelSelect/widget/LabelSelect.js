@@ -36,8 +36,6 @@ define([
                 'id': this.id + '_ListBox'
             });
             domConstruct.place(this._listBox, this.domNode);
-
-            this._setupEvents();
         },
 
         update: function (obj, callback) {
