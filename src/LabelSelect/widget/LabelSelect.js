@@ -21,12 +21,9 @@ define([
         _refAttribute: null,
         _tagCache: null,
 
-        constructor: function () {
-            this._handles = [];
-        },
-
         postCreate: function () {
             //set the variables:
+			this._handles = [];
             this._tagEntity = this.tagAssoc.split('/')[1];
             this._refAttribute = this.tagAssoc.split('/')[0];
             this._tagAttribute = this.tagAttrib.split('/')[2];
@@ -170,12 +167,7 @@ define([
                 attrHandle = null,
                 validationHandle = null;
 
-            if (this._handles && this._handles.length && this._handles.length > 0) {
-                dojoArray.forEach(this._handles, lang.hitch(this, function (handle) {
-                    this.unsubscribe(handle);
-                }));
-                this._handles = [];
-            }
+            this._clearSubscriptions();
 
             if (this._contextObj) {
                 handle = this.subscribe({
@@ -322,7 +314,20 @@ define([
             });
 
             this.domNode.appendChild(this._alertdiv);
-        }
+        },
+		
+		_clearSubscriptions: function () {
+			if (this._handles && this._handles.length && this._handles.length > 0) {
+                dojoArray.forEach(this._handles, lang.hitch(this, function (handle) {
+                    this.unsubscribe(handle);
+                }));
+                this._handles = [];
+            }
+		},
+		
+		uninitialize: function () {
+			this._clearSubscriptions();
+		}
     });
 });
 
