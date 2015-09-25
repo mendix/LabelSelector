@@ -125,7 +125,7 @@ define([
                     //set the value
                     obj.set(this._tagAttribute, value);
                     //save
-                    mx.data.save({
+                    mx.data.commit({
                         mxobj: obj,
                         callback: function () {
                             // save the label before calling the microflow to save the new label
