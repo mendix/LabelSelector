@@ -3,11 +3,25 @@
 /*mendix */
 
 define([
-    'dojo/_base/declare', 'mxui/widget/_WidgetBase', 'dijit/_TemplatedMixin',
-    'mxui/dom', 'dojo/dom', 'dojo/query', 'dojo/dom-prop', 'dojo/dom-geometry', 'dojo/dom-class', 'dojo/dom-style', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/_base/lang', 'dojo/text',
-    'LabelSelect/lib/jquery-1.11.2', 'dojo/text!LabelSelect/widget/template/LabelSelect.html'
+    'dojo/_base/declare',
+    'mxui/widget/_WidgetBase',
+    'dijit/_TemplatedMixin',
+    'mxui/dom',
+    'dojo/dom',
+    'dojo/query',
+    'dojo/dom-prop',
+    'dojo/dom-geometry',
+    'dojo/dom-class',
+    'dojo/dom-style',
+    'dojo/dom-construct',
+    'dojo/_base/array',
+    'dojo/_base/lang',
+    'dojo/text',
+    'LabelSelect/lib/jquery-1.11.2',
+    'dojo/text!LabelSelect/widget/template/LabelSelect.html'
 ], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, _jQuery, widgetTemplate) {
     'use strict';
+
     var $ = _jQuery.noConflict(true);
 
     return declare('LabelSelect.widget.LabelSelect', [_WidgetBase, _TemplatedMixin], {
@@ -23,7 +37,7 @@ define([
 
         postCreate: function () {
             //set the variables:
-			this._handles = [];
+            this._handles = [];
             this._tagEntity = this.tagAssoc.split('/')[1];
             this._refAttribute = this.tagAssoc.split('/')[0];
             this._tagAttribute = this.tagAttrib.split('/')[2];
@@ -62,7 +76,7 @@ define([
             var refObjs = this._contextObj.get(this._refAttribute),
                 tagArray = [],
                 currentTags = [];
-				
+
             dojoArray.forEach(objs, function (tagObj, index) {
                 //clean up the text
                 var value = dom.escapeString(tagObj.get(this._tagAttribute));
@@ -70,7 +84,7 @@ define([
                 this._tagCache[value] = tagObj;
                 //check if this is a current tag
                 dojoArray.forEach(refObjs, function (ref, i) {
-                    if (ref === tagObj.getGUID()) {
+                    if (ref === tagObj.getGuid()) {
                         currentTags.push(tagObj);
                     }
                 }, this);
@@ -90,7 +104,7 @@ define([
                 if (!domClass.contains(items[0], 'tagit-new')) {
                     domConstruct.destroy(items[0]);
                 }
-                //break if we're at the last item and this item is the input field 
+                //break if we're at the last item and this item is the input field
                 if (items.length === 1 && domClass.contains(items[0], 'tagit-new')) {
                     break;
                 }
@@ -146,6 +160,9 @@ define([
         _execMf: function (guid, mf, cb) {
             if (guid && mf) {
                 mx.data.action({
+                    store: {
+                        caller: this.mxform
+                    },
                     applyto: 'selection',
                     actionname: mf,
                     guids: [guid],
@@ -213,11 +230,11 @@ define([
         _isReference: function (guid) {
             var isRef = false,
                 refs = this._contextObj.getReferences(this._refAttribute);
-			
-			dojoArray.forEach(refs, function (ref, i) {
-				if (ref === guid) {
-					isRef = true;
-				}
+
+            dojoArray.forEach(refs, function (ref, i) {
+                if (ref === guid) {
+                    isRef = true;
+                }
             });
 
             return isRef;
@@ -315,19 +332,19 @@ define([
 
             this.domNode.appendChild(this._alertdiv);
         },
-		
-		_clearSubscriptions: function () {
-			if (this._handles && this._handles.length && this._handles.length > 0) {
+
+        _clearSubscriptions: function () {
+            if (this._handles && this._handles.length && this._handles.length > 0) {
                 dojoArray.forEach(this._handles, lang.hitch(this, function (handle) {
                     this.unsubscribe(handle);
                 }));
                 this._handles = [];
             }
-		},
-		
-		uninitialize: function () {
-			this._clearSubscriptions();
-		}
+        },
+
+        uninitialize: function () {
+            this._clearSubscriptions();
+        }
     });
 });
 
