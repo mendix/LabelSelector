@@ -1,5 +1,5 @@
 {
-  "name": "LabelSelector",
+  "name": "LabelSelect",
   "version": "4.1.0",
   "description": "With this widget you can easily create/assign/remove objects (for example labels) to/from an object.",
   "private": true,
