@@ -5,4 +5,8 @@ test/.project
 *.launch
 *.tmp
 *.lock
+.idea/
 
+*DS_Store*
+node_modules/
+dist/
