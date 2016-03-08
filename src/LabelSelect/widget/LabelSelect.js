@@ -3,28 +3,28 @@
 /*mendix */
 
 define([
-    'dojo/_base/declare',
-    'mxui/widget/_WidgetBase',
-    'dijit/_TemplatedMixin',
-    'mxui/dom',
-    'dojo/dom',
-    'dojo/query',
-    'dojo/dom-prop',
-    'dojo/dom-geometry',
-    'dojo/dom-class',
-    'dojo/dom-style',
-    'dojo/dom-construct',
-    'dojo/_base/array',
-    'dojo/_base/lang',
-    'dojo/text',
-    'LabelSelect/lib/jquery-1.11.2',
-    'dojo/text!LabelSelect/widget/template/LabelSelect.html'
+    "dojo/_base/declare",
+    "mxui/widget/_WidgetBase",
+    "dijit/_TemplatedMixin",
+    "mxui/dom",
+    "dojo/dom",
+    "dojo/query",
+    "dojo/dom-prop",
+    "dojo/dom-geometry",
+    "dojo/dom-class",
+    "dojo/dom-style",
+    "dojo/dom-construct",
+    "dojo/_base/array",
+    "dojo/_base/lang",
+    "dojo/text",
+    "LabelSelect/lib/jquery-1.11.2",
+    "dojo/text!LabelSelect/widget/template/LabelSelect.html"
 ], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, domQuery, domProp, domGeom, domClass, domStyle, domConstruct, dojoArray, lang, text, _jQuery, widgetTemplate) {
-    'use strict';
+    "use strict";
 
     var $ = _jQuery.noConflict(true);
 
-    return declare('LabelSelect.widget.LabelSelect', [_WidgetBase, _TemplatedMixin], {
+    return declare("LabelSelect.widget.LabelSelect", [_WidgetBase, _TemplatedMixin], {
         templateString: widgetTemplate,
 
         _handles: null,
@@ -36,20 +36,22 @@ define([
         _tagCache: null,
 
         postCreate: function () {
+            logger.debug(this.id + ".postCreate");
             //set the variables:
             this._handles = [];
-            this._tagEntity = this.tagAssoc.split('/')[1];
-            this._refAttribute = this.tagAssoc.split('/')[0];
-            this._tagAttribute = this.tagAttrib.split('/')[2];
+            this._tagEntity = this.tagAssoc.split("/")[1];
+            this._refAttribute = this.tagAssoc.split("/")[0];
+            this._tagAttribute = this.tagAttrib.split("/")[2];
             this._tagCache = {}; //we need this to set references easily.
 
-            this._listBox = domConstruct.create('ul', {
-                'id': this.id + '_ListBox'
+            this._listBox = domConstruct.create("ul", {
+                "id": this.id + "_ListBox"
             });
             domConstruct.place(this._listBox, this.domNode);
         },
 
         update: function (obj, callback) {
+            logger.debug(this.id + ".update");
             if (obj) {
                 domStyle.set(this.domNode, "visibility", "visible");
 
@@ -63,16 +65,17 @@ define([
         },
 
         _fetchCurrentLabels: function () {
+            logger.debug(this.id + "._fetchCurrentLabels");
             //fetch all referenced labels
-            var xpath = '//' + this._tagEntity + this.tagConstraint.replace('[%CurrentObject%]', this._contextObj.getGuid());
+            var xpath = "//" + this._tagEntity + this.tagConstraint.replace("[%CurrentObject%]", this._contextObj.getGuid());
             mx.data.get({
                 xpath: xpath,
                 callback: lang.hitch(this, this._processTags)
             });
         },
 
-
         _processTags: function (objs) {
+            logger.debug(this.id + "._processTags");
             var refObjs = this._contextObj.get(this._refAttribute),
                 tagArray = [],
                 currentTags = [];
@@ -97,15 +100,16 @@ define([
         },
 
         _renderCurrentTags: function (currentTags) {
-            //we're not using the plugin function "remove all" because we don't want to remove references
+            logger.debug(this.id + "._renderCurrentTags");
+            //we"re not using the plugin function "remove all" because we don"t want to remove references
             var items = this._listBox.getElementsByTagName("li");
             while (items.length > 0) {
                 //delete the all tags except the "input" field
-                if (!domClass.contains(items[0], 'tagit-new')) {
+                if (!domClass.contains(items[0], "tagit-new")) {
                     domConstruct.destroy(items[0]);
                 }
-                //break if we're at the last item and this item is the input field
-                if (items.length === 1 && domClass.contains(items[0], 'tagit-new')) {
+                //break if we"re at the last item and this item is the input field
+                if (items.length === 1 && domClass.contains(items[0], "tagit-new")) {
                     break;
                 }
             }
@@ -113,22 +117,23 @@ define([
             //create a tag for all items
             dojoArray.forEach(currentTags, function (tagObj, index) {
                 var value = dom.escapeString(tagObj.get(this._tagAttribute));
-                $('#' + this.id + '_ListBox').tagit("createTag", value);
+                $("#" + this.id + "_ListBox").tagit("createTag", value);
             }, this);
         },
 
         _startTagger: function (options) {
+            logger.debug(this.id + "._startTagger");
             if (options) {
-                $('#' + this.id + '_ListBox').tagit(options);
+                $("#" + this.id + "_ListBox").tagit(options);
             } else {
                 //fallback
-                logger.warn('No options found, running defaults');
-                $('#' + this.id + '_ListBox').tagit();
+                logger.warn("No options found, running defaults");
+                $("#" + this.id + "_ListBox").tagit();
             }
         },
 
-
         _createTagobject: function (value) {
+            logger.debug(this.id + "._createTagobject");
             //create a new tag
             mx.data.create({
                 entity: this._tagEntity,
@@ -146,24 +151,25 @@ define([
                             if (this.aftercreatemf) {
                                 this._execMf(this._contextObj.getGuid(), this.aftercreatemf);
                             } else {
-                                console.log(this.id + ' - please add an after create mf to commit the object, otherwise ui is incorrectly displayed.');
+                                console.log(this.id + " - please add an after create mf to commit the object, otherwise ui is incorrectly displayed.");
                             }
                         }
                     }, this);
                 },
                 error: function (e) {
-                    logger.error('Error creating object: ' + e);
+                    logger.error("Error creating object: " + e);
                 }
             }, this);
         },
 
         _execMf: function (guid, mf, cb) {
+            logger.debug(this.id + "._execMf");
             if (guid && mf) {
                 mx.data.action({
                     store: {
                         caller: this.mxform
                     },
-                    applyto: 'selection',
+                    applyto: "selection",
                     actionname: mf,
                     guids: [guid],
                     callback: function () {
@@ -172,14 +178,14 @@ define([
                         }
                     },
                     error: function (e) {
-                        logger.error('Error running Microflow: ' + e);
+                        logger.error("Error running Microflow: " + e);
                     }
                 }, this);
             }
         },
 
-
         _resetSubscriptions: function () {
+            logger.debug(this.id + "._resetSubscriptions");
             var handle = null,
                 attrHandle = null,
                 validationHandle = null;
@@ -228,6 +234,7 @@ define([
         },
 
         _isReference: function (guid) {
+            logger.debug(this.id + "._isReference");
             var isRef = false,
                 refs = this._contextObj.getReferences(this._refAttribute);
 
@@ -241,6 +248,7 @@ define([
         },
 
         _saveObject: function () {
+            logger.debug(this.id + "._saveObject");
             mx.data.save({
                 mxobj: this._contextObj,
                 callback: function () {
@@ -249,8 +257,8 @@ define([
             }, this);
         },
 
-
         _setOptions: function (tagArray) {
+            logger.debug(this.id + "._setOptions");
             //TODO: allow users to set options
             var options = {
                     availableTags: tagArray,
@@ -267,7 +275,7 @@ define([
                     readOnly: this.readOnly,
                     tagLimit: null,
                     singleField: false,
-                    singleFieldDelimiter: ',',
+                    singleFieldDelimiter: ",",
                     singleFieldNode: null,
                     tabIndex: null,
                     placeholderText: null,
@@ -285,7 +293,7 @@ define([
                         } else if (this.enableCreate) {
                             this._createTagobject(ui.tagLabel);
                         } else {
-                            logger.warn('No Tag found for value: ' + ui.tagLabel);
+                            logger.warn("No Tag found for value: " + ui.tagLabel);
                         }
                     }),
 
@@ -297,7 +305,7 @@ define([
                             this._contextObj.removeReferences(this._refAttribute, [tagObj.getGuid()]);
                             this._saveObject();
                         } else {
-                            logger.warn('No Tag found for value: ' + ui.tagLabel);
+                            logger.warn("No Tag found for value: " + ui.tagLabel);
                         }
                     })
                 };
@@ -305,6 +313,7 @@ define([
         },
 
         _handleValidation: function (validations) {
+            logger.debug(this.id + "._handleValidation");
             this._clearValidations();
 
             var val = validations[0],
@@ -321,12 +330,14 @@ define([
         },
 
         _clearValidations: function () {
+            logger.debug(this.id + "._clearValidations");
             domConstruct.destroy(this._alertdiv);
         },
 
         _addValidation: function (msg) {
+            logger.debug(this.id + "._addValidation");
             this._alertdiv = domConstruct.create("div", {
-                'class': 'alert alert-danger',
+                "class": "alert alert-danger",
                 innerHTML: msg
             });
 
@@ -334,6 +345,7 @@ define([
         },
 
         _clearSubscriptions: function () {
+            logger.debug(this.id + "._clearSubscriptions");
             if (this._handles && this._handles.length && this._handles.length > 0) {
                 dojoArray.forEach(this._handles, lang.hitch(this, function (handle) {
                     this.unsubscribe(handle);
@@ -343,11 +355,12 @@ define([
         },
 
         uninitialize: function () {
+            logger.debug(this.id + ".uninitialize");
             this._clearSubscriptions();
         }
     });
 });
 
-require(['LabelSelect/widget/LabelSelect'], function () {
-    'use strict';
+require(["LabelSelect/widget/LabelSelect"], function () {
+    "use strict";
 });
