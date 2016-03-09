@@ -35,6 +35,8 @@ define([
         _refAttribute: null,
         _tagCache: null,
 
+        _constructed: false,
+
         postCreate: function () {
             logger.debug(this.id + ".postCreate");
             //set the variables:
@@ -43,38 +45,47 @@ define([
             this._refAttribute = this.tagAssoc.split("/")[0];
             this._tagAttribute = this.tagAttrib.split("/")[2];
             this._tagCache = {}; //we need this to set references easily.
-
-            this._listBox = domConstruct.create("ul", {
-                "id": this.id + "_ListBox"
-            });
-            domConstruct.place(this._listBox, this.domNode);
         },
 
         update: function (obj, callback) {
             logger.debug(this.id + ".update");
+
+            if (!this._constructed) {
+                this._listBox = domConstruct.create("ul", {
+                    "id": this.id + "_ListBox"
+                });
+                domConstruct.place(this._listBox, this.domNode);
+                this._constructed = true;
+            }
+
             if (obj) {
                 domStyle.set(this.domNode, "visibility", "visible");
 
                 this._contextObj = obj;
-                this._fetchCurrentLabels();
+                this._fetchCurrentLabels(callback);
+
                 this._resetSubscriptions();
             } else {
                 domStyle.set(this.domNode, "visibility", "hidden");
+                callback();
             }
-            callback();
         },
 
-        _fetchCurrentLabels: function () {
+        _fetchCurrentLabels: function (callback) {
             logger.debug(this.id + "._fetchCurrentLabels");
             //fetch all referenced labels
             var xpath = "//" + this._tagEntity + this.tagConstraint.replace("[%CurrentObject%]", this._contextObj.getGuid());
             mx.data.get({
                 xpath: xpath,
-                callback: lang.hitch(this, this._processTags)
+                callback: lang.hitch(this, this._processTags, callback),
+                error: lang.hitch(this, function (err) {
+                    console.error(this.id + "._fetchCurrentLabels get failed, err: " + err.toString());
+                    mendix.lang.nullExec(callback);
+                })
             });
         },
 
-        _processTags: function (objs) {
+        _processTags: function (callback, objs) {
             logger.debug(this.id + "._processTags");
             var refObjs = this._contextObj.get(this._refAttribute),
                 tagArray = [],
@@ -96,10 +107,10 @@ define([
             }, this);
 
             this._setOptions(tagArray);
-            this._renderCurrentTags(currentTags);
+            this._renderCurrentTags(currentTags, callback);
         },
 
-        _renderCurrentTags: function (currentTags) {
+        _renderCurrentTags: function (currentTags, callback) {
             logger.debug(this.id + "._renderCurrentTags");
             //we"re not using the plugin function "remove all" because we don"t want to remove references
             var items = this._listBox.getElementsByTagName("li");
@@ -119,6 +130,8 @@ define([
                 var value = dom.escapeString(tagObj.get(this._tagAttribute));
                 $("#" + this.id + "_ListBox").tagit("createTag", value);
             }, this);
+
+            mendix.lang.nullExec(callback);
         },
 
         _startTagger: function (options) {
@@ -137,43 +150,45 @@ define([
             //create a new tag
             mx.data.create({
                 entity: this._tagEntity,
-                callback: function (obj) {
+                callback: lang.hitch(this, function (obj) {
                     //set the value
                     obj.set(this._tagAttribute, value);
                     //save
                     mx.data.commit({
                         mxobj: obj,
-                        callback: function () {
+                        callback: lang.hitch(this, function () {
                             // save the label before calling the microflow to save the new label
                             this._contextObj.addReference(this._refAttribute, obj.getGuid());
                             this._saveObject();
                             //run the after create mf
                             if (this.aftercreatemf) {
-                                this._execMf(this._contextObj.getGuid(), this.aftercreatemf);
+                                this._execMf(this._contextObj, this.aftercreatemf);
                             } else {
                                 console.log(this.id + " - please add an after create mf to commit the object, otherwise ui is incorrectly displayed.");
                             }
-                        }
+                        })
                     }, this);
-                },
+                }),
                 error: function (e) {
                     logger.error("Error creating object: " + e);
                 }
             }, this);
         },
 
-        _execMf: function (guid, mf, cb) {
+        _execMf: function (obj, mf, cb) {
             logger.debug(this.id + "._execMf");
-            if (guid && mf) {
+            if (obj && mf) {
                 mx.data.action({
+                    params: {
+                        applyto: "selection",
+                        actionname: mf,
+                        guids: [obj.getGuid()],
+                    },
                     store: {
                         caller: this.mxform
                     },
-                    applyto: "selection",
-                    actionname: mf,
-                    guids: [guid],
                     callback: function () {
-                        if (cb) {
+                        if (cb && typeof cb === "function") {
                             cb();
                         }
                     },
@@ -251,9 +266,9 @@ define([
             logger.debug(this.id + "._saveObject");
             mx.data.save({
                 mxobj: this._contextObj,
-                callback: function () {
-                    this._execMf(this._contextObj.getGuid(), this.onchangemf);
-                }
+                callback: lang.hitch(this, function () {
+                    this._execMf(this._contextObj, this.onchangemf);
+                })
             }, this);
         },
 
