@@ -35,6 +35,8 @@ define([
         _refAttribute: null,
         _tagCache: null,
 
+        _readOnly: false,
+
         _constructed: false,
 
         postCreate: function () {
@@ -45,6 +47,8 @@ define([
             this._refAttribute = this.tagAssoc.split("/")[0];
             this._tagAttribute = this.tagAttrib.split("/")[2];
             this._tagCache = {}; //we need this to set references easily.
+
+            this._readOnly = this.readOnly || this.get("disabled") || this.readonly;
         },
 
         update: function (obj, callback) {
@@ -287,7 +291,7 @@ define([
                     caseSensitive: true,
                     allowDuplicates: false,
                     allowSpaces: false,
-                    readOnly: this.readOnly,
+                    readOnly: this._readOnly,
                     tagLimit: null,
                     singleField: false,
                     singleFieldDelimiter: ",",
@@ -299,9 +303,10 @@ define([
                         this._clearValidations();
                         //fetch tag from cache
                         var tagObj = this._tagCache[ui.tagLabel];
+
                         if (tagObj) {
                             //check if already a reference
-                            if (!this._isReference(tagObj.getGuid())) {
+                            if (!this._isReference(tagObj.getGuid()) && !this._readOnly) {
                                 this._contextObj.addReference(this._refAttribute, tagObj.getGuid());
                                 this._saveObject();
                             }
