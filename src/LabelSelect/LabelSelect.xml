@@ -32,6 +32,14 @@ RU5ErkJggg==</icon>
 		<attributeType name="String"/> 
 	  </attributeTypes>
 	</property>
+	<property key="colorAttrib" type="attribute" isPath="yes" pathType="referenceSet" required="false">
+	  <caption>Color Attribute</caption>
+	  <category>Data source</category>
+	  <description>The color attribute of the label object </description>
+	  <attributeTypes>
+		<attributeType name="String"/> 
+	  </attributeTypes>
+	</property>
 	<property key="tagConstraint" type="entityConstraint" required="false" entityProperty="tagAssoc">
 	  <caption>Label constraint</caption>
 	  <category>Data source</category>

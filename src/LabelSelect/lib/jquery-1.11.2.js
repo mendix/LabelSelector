@@ -10800,7 +10800,7 @@ return isNaN(t)?d:t},g=p(l[0]),m=Math.max(g,p(l[1]||"")),g=a?Math.max(g,a.getFul
             return Boolean($.effects && ($.effects[name] || ($.effects.effect && $.effects.effect[name])));
         },
 
-        createTag: function(value, additionalClass, duringInitialization) {
+        createTag: function(value, additionalClass, duringInitialization, color) {
             var that = this;
 
             value = $.trim(value);
@@ -10838,6 +10838,13 @@ return isNaN(t)?d:t},g=p(l[0]),m=Math.max(g,p(l[1]||"")),g=a?Math.max(g,a.getFul
                 .addClass('tagit-choice ui-widget-content ui-state-default ui-corner-all')
                 .addClass(additionalClass)
                 .append(label);
+            //CUSTUM add color
+            if(color){
+                var textClass = (parseInt(color.replace('#', ''), 16) > 0xffffff / 2) ? "text-normal" : "text-contrast";                
+                tag.css("background-color", color)
+                .css("background-image", "none")
+                .addClass(textClass);
+            }
 
             if (this.options.readOnly){
                 tag.addClass('tagit-choice-read-only');

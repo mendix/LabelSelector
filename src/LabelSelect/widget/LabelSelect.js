@@ -1,5 +1,5 @@
 /*jslint white:true, nomen: true, plusplus: true */
-/*global mx, define, require, browser, devel, console, logger */
+/*global mx, define, require, browser, devel, console, logger, mendix */
 /*mendix */
 
 define([
@@ -32,6 +32,7 @@ define([
         _listBox: null,
         _tagEntity: null,
         _tagAttribute: null,
+        _colorAttribute: null,
         _refAttribute: null,
         _tagCache: null,
 
@@ -46,6 +47,7 @@ define([
             this._tagEntity = this.tagAssoc.split("/")[1];
             this._refAttribute = this.tagAssoc.split("/")[0];
             this._tagAttribute = this.tagAttrib.split("/")[2];
+            this._colorAttribute = this.colorAttrib.split("/")[2];
             this._tagCache = {}; //we need this to set references easily.
 
             this._readOnly = this.readOnly || this.get("disabled") || this.readonly;
@@ -128,11 +130,16 @@ define([
                     break;
                 }
             }
-
+            var additionalClass = null,
+                duringInitialization = false,
+                value = null,
+                color = null;
             //create a tag for all items
             dojoArray.forEach(currentTags, function (tagObj, index) {
-                var value = dom.escapeString(tagObj.get(this._tagAttribute));
-                $("#" + this.id + "_ListBox").tagit("createTag", value);
+                value = dom.escapeString(tagObj.get(this._tagAttribute));
+                color = (this._colorAttribute) ? dom.escapeString(tagObj.get(this._colorAttribute)) : null;
+                
+                $("#" + this.id + "_ListBox").tagit("createTag", value, additionalClass, duringInitialization, color);
             }, this);
 
             mendix.lang.nullExec(callback);
@@ -186,7 +193,7 @@ define([
                     params: {
                         applyto: "selection",
                         actionname: mf,
-                        guids: [obj.getGuid()],
+                        guids: [obj.getGuid()]
                     },
                     store: {
                         caller: this.mxform

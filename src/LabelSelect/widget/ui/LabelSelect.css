@@ -1651,3 +1651,11 @@ ul.tagit-autocomplete {
 .labelselect-message {
 
 }
+
+.labelselect .text-normal {
+    color: #000000;
+} 
+
+.labelselect .text-contrast{
+    color: #FFFFFF;
+}
