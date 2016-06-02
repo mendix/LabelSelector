@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <widget id="LabelSelect.widget.LabelSelect" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
-  <name>Label Selector</name>
-  <description>Show or manipulate the labels of an object.</description>
+	<name>Label Selector</name>
+	<description>Show or manipulate the labels of an object.</description>
 
-  <icon>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
+	<icon>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
 U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJ+SURBVDjLfZPNTxNRFMXnX3DhxkRN48aE
 f8CkYaFGAy7cKImRCAv8iInGnSDGhSFEsJqoUWxABGNQ0zZFGrWRfqS1rf2ype1MC5FaytBmirWK
 1M7YTofjm0GaUAqLt7lzz++ce98bKh6Pg2EYxGIxRKNRRCIRhMNhhEIhBIPB3QConQ5F0zQkSdpy
@@ -18,47 +18,67 @@ GX8bSgvtKER68HWYxJ6a2CRuCNANHgVW05gbPg177x54tK1waY7BYhzfIm4I6LvQJJa9j1H2P4S/
 /zB0lw7ArB+FTqdTNXzK9YW25l3Cnc6Dom2gVbTeP+I0DvWcIuJ92/1M/wCZISaoLgB85AAAAABJ
 RU5ErkJggg==</icon>
 
-  <properties>
+	<properties>
 	<property key="tagAssoc" type="entity" required="true" isPath="yes" pathType="referenceSet">
-      <caption>Label Object</caption>
-      <category>Data source</category>
-      <description>Select the entity in which the label data is stored here. This property defines the reference between the context object and the label object. </description> 
+			<caption>Label Object</caption>
+			<category>Data source</category>
+			<description>Select the entity in which the label data is stored here. This property defines the reference between the context object and the label object. </description> 
 	</property>
 	<property key="tagAttrib" type="attribute" isPath="yes" pathType="referenceSet" required="true">
-	  <caption>Caption Attribute</caption>
-	  <category>Data source</category>
-	  <description>The caption attribute of the label object, in which the user input is stored. </description>
-	  <attributeTypes>
+		<caption>Caption Attribute</caption>
+		<category>Data source</category>
+		<description>The caption attribute of the label object, in which the user input is stored. </description>
+		<attributeTypes>
 		<attributeType name="String"/> 
-	  </attributeTypes>
+		</attributeTypes>
 	</property>
 	<property key="colorAttrib" type="attribute" isPath="yes" pathType="referenceSet" required="false">
-	  <caption>Color Attribute</caption>
-	  <category>Data source</category>
-	  <description>The color attribute of the label object</description>
-	  <attributeTypes>
+		<caption>Color Attribute</caption>
+		<category>Data source</category>
+		<description>The color attribute of the label object</description>
+		<attributeTypes>
 		<attributeType name="String"/> 
-	  </attributeTypes>
+		</attributeTypes>
 	</property>
+	<property key="sortAttr" type="attribute" entityProperty="reference" required="false">
+		<caption>Sort attribute</caption>
+		<category>Data source</category>
+		<description>The attribute to sort on.</description>
+		<attributeTypes>
+				<attributeType name="String"/>
+				<attributeType name="Integer"/>
+				<attributeType name="Currency"/>
+				<attributeType name="Enum"/>
+		</attributeTypes>
+	</property>
+<property key="sortOrder" type="enumeration" defaultValue="Asc">
+		<caption>Sort order</caption>
+		<category>Data source</category>
+		<description>The sort order.</description>
+		<enumerationValues>
+				<enumerationValue key="Asc">Ascending</enumerationValue>
+				<enumerationValue key="Desc">Descending</enumerationValue>
+		</enumerationValues>  
+</property>
 	<property key="tagConstraint" type="entityConstraint" required="false" entityProperty="tagAssoc">
-	  <caption>Label constraint</caption>
-	  <category>Data source</category>
-	  <description>Optional constraint on suggested the label objects</description>
+		<caption>Label constraint</caption>
+		<category>Data source</category>
+		<description>Optional constraint on suggested the label objects</description>
 	</property>
 	<property key="enableCreate" type="boolean" defaultValue='true'>
-	  <caption>Enable create</caption>
-	  <category>Behavior</category>
-	  <description>Enable creating new labels.</description>
+		<caption>Enable create</caption>
+		<category>Behavior</category>
+		<description>Enable creating new labels.</description>
 	</property>
 	<property key="readOnly" type="boolean" defaultValue='false'>
-	  <caption>Read Only</caption>
-	  <category>Behavior</category>
-	  <description>Make the widget read only.</description>
+		<caption>Read Only</caption>
+		<category>Behavior</category>
+		<description>Make the widget read only.</description>
 	</property>
 	<property key="showAutoCompleteOnFocus" type="boolean" defaultValue='false'>
-	  <caption>Show Labels</caption>
-	  <category>Behavior</category>
-	  <description>Show available labels on focus.</description>
+		<caption>Show Labels</caption>
+		<category>Behavior</category>
+		<description>Show available labels on focus.</description>
 	</property>
 	<property key="aftercreatemf" type="microflow" required="false">
 		<caption>After create label</caption>
@@ -72,6 +92,6 @@ RU5ErkJggg==</icon>
 		<description></description>
 		<returnType type="Void"/>
 	</property>
-  </properties>
+	</properties>
 </widget>
 
