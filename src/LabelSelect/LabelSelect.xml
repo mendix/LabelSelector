@@ -40,7 +40,7 @@ RU5ErkJggg==</icon>
 		<attributeType name="String"/> 
 		</attributeTypes>
 	</property>
-	<property key="sortAttr" type="attribute" entityProperty="reference" required="false">
+	<property key="sortAttr" type="attribute" entityProperty="tagAssoc" required="false">
 		<caption>Sort attribute</caption>
 		<category>Data source</category>
 		<description>The attribute to sort on.</description>
