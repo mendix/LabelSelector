@@ -75,7 +75,7 @@ define([
 		_fetchCurrentLabels: function (callback) {
 			logger.debug(this.id + "._fetchCurrentLabels");
 			//fetch all referenced labels
-			var xpath = "//" + this._tagEntity + this.tagConstraint.replace("[%CurrentObject%]", this._contextObj.getGuid());
+			var xpath = "//" + this._tagEntity + this.tagConstraint.replace(/\[\%CurrentObject\%\]/gi, this._contextObj.getGuid());
 			var filters = {};
 			if (this.sortAttr && this.sortOrder) {
 				filters.sort = [[this.sortAttr, this.sortOrder]];
