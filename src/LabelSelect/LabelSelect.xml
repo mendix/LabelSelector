@@ -80,6 +80,16 @@ RU5ErkJggg==</icon>
 		<category>Behavior</category>
 		<description>Show available labels on focus.</description>
 	</property>
+	<property key="tagLimit" type="integer" defaultValue='0'>
+		<caption>Tag limit</caption>
+		<category>Behavior</category>
+		<description>Limits the total number of tags that can be entered at once.</description>
+	</property>
+	<property key="autocompleteMinLength" type="integer" defaultValue='0'>
+		<caption>Autocomplete minimum length</caption>
+		<category>Behavior</category>
+		<description>The minimum length that should be entered before autocomplete starts.</description>
+	</property>
 	<property key="aftercreatemf" type="microflow" required="false">
 		<caption>After create label</caption>
 		<category>Interaction</category>

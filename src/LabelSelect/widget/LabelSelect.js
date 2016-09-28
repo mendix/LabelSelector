@@ -290,7 +290,7 @@ define([
 					availableTags: tagArray,
 					autocomplete: {
 						delay: 0,
-						minLength: 0
+						minLength: this.autocompleteMinLength
 					},
 					enableCreate: this.enableCreate,
 					showAutocompleteOnFocus: this.showAutoCompleteOnFocus,
@@ -299,7 +299,7 @@ define([
 					allowDuplicates: false,
 					allowSpaces: false,
 					readOnly: this._readOnly,
-					tagLimit: null,
+					tagLimit: this.tagLimit > 0 ? this.tagLimit : null,
 					singleField: false,
 					singleFieldDelimiter: ",",
 					singleFieldNode: null,
