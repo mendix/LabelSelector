@@ -82,7 +82,7 @@ define([
 			}
 			mx.data.get({
 				xpath: xpath,
-				filters : filters,
+				filter : filters,
 				callback: lang.hitch(this, this._processTags, callback),
 				error: lang.hitch(this, function (err) {
 					console.error(this.id + "._fetchCurrentLabels get failed, err: " + err.toString());
