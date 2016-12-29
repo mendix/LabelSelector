@@ -1,107 +1,95 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <widget id="LabelSelect.widget.LabelSelect" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
-	<name>Label Selector</name>
-	<description>Show or manipulate the labels of an object.</description>
+    <name>Label Selector</name>
+    <description>Show or manipulate the labels of an object.</description>
 
-	<icon>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0
-U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJ+SURBVDjLfZPNTxNRFMXnX3DhxkRN48aE
-f8CkYaFGAy7cKImRCAv8iInGnSDGhSFEsJqoUWxABGNQ0zZFGrWRfqS1rf2ype1MC5FaytBmirWK
-1M7YTofjm0GaUAqLt7lzz++ce98bKh6Pg2EYxGIxRKNRRCIRhMNhhEIhBIPB3QConQ5F0zQkSdpy
-MpmMAvH5fDtCKNlZFrAsqzin0+kaRK6RFHC73dtCKDmy3Cy7yYVAIBAqFosQRVGpy0Cv1wuHw9EQ
-QsmuG41EXCaRWUEQkCuKsC2tJ0mlUnC5XLDZbFsglOy8EblarUIWfy9JuDuzhr4vgJVd/5ZMJhGw
-PMLcxBnMT/UjMnoc0SdNHRSZkc/n80pTpVIBR5wHw2sYYoDhOKCZWYf8yUyCs3djJfYOKGbxK2aA
-915LjvL7/c1kRn55eVmB0HlRcdYSwPNZYCQBvPn8HoX4bZSXTOAcGvC0EdW0G/TYRUGZw+PxqMmM
-fC6XUyCJHyIGQhK0JIEp7ESBuQWJd4P/dgWFwFXMvuwiI5yHc+TaodoynE6nmmya5ziuBhl32/GT
-vgFJ8KKU7ITAtmM10YvU2ElYJl/AYDDs37RRsmW11Wrls9ksssxbcMHu/+IOCItn8Zu5iaT2BOzG
-UVmsUm6h/lqmp6fV5ld95cTH6yT2JwgLXfjLnsMKSTL/tAUW02vo9XpV7RrrAc8u7+2Kf+hF1PwA
-GX8bSgvtKER68HWYxJ6a2CRuCNANHgVW05gbPg177x54tK1waY7BYhzfIm4I6LvQJJa9j1H2P4S/
-/zB0lw7ArB+FTqdTNXzK9YW25l3Cnc6Dom2gVbTeP+I0DvWcIuJ92/1M/wCZISaoLgB85AAAAABJ
-RU5ErkJggg==</icon>
+    <icon>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAJ+SURBVDjLfZPNTxNRFMXnX3DhxkRN48aEf8CkYaFGAy7cKImRCAv8iInGnSDGhSFEsJqoUWxABGNQ0zZFGrWRfqS1rf2ype1MC5FaytBmirWK1M7YTofjm0GaUAqLt7lzz++ce98bKh6Pg2EYxGIxRKNRRCIRhMNhhEIhBIPB3QConQ5F0zQkSdpyMpmMAvH5fDtCKNlZFrAsqzin0+kaRK6RFHC73dtCKDmy3Cy7yYVAIBAqFosQRVGpy0Cv1wuHw9EQQsmuG41EXCaRWUEQkCuKsC2tJ0mlUnC5XLDZbFsglOy8EblarUIWfy9JuDuzhr4vgJVd/5ZMJhGwPMLcxBnMT/UjMnoc0SdNHRSZkc/n80pTpVIBR5wHw2sYYoDhOKCZWYf8yUyCs3djJfYOKGbxK2aA915LjvL7/c1kRn55eVmB0HlRcdYSwPNZYCQBvPn8HoX4bZSXTOAcGvC0EdW0G/TYRUGZw+PxqMmMfC6XUyCJHyIGQhK0JIEp7ESBuQWJd4P/dgWFwFXMvuwiI5yHc+TaodoynE6nmmya5ziuBhl32/GTvgFJ8KKU7ITAtmM10YvU2ElYJl/AYDDs37RRsmW11Wrls9ksssxbcMHu/+IOCItn8Zu5iaT2BOzGUVmsUm6h/lqmp6fV5ld95cTH6yT2JwgLXfjLnsMKSTL/tAUW02vo9XpV7RrrAc8u7+2Kf+hF1PwAGX8bSgvtKER68HWYxJ6a2CRuCNANHgVW05gbPg177x54tK1waY7BYhzfIm4I6LvQJJa9j1H2P4S//zB0lw7ArB+FTqdTNXzK9YW25l3Cnc6Dom2gVbTeP+I0DvWcIuJ92/1M/wCZISaoLgB85AAAAABJRU5ErkJggg==</icon>
 
-	<properties>
-	<property key="tagAssoc" type="entity" required="true" isPath="yes" pathType="referenceSet">
-			<caption>Label Object</caption>
-			<category>Data source</category>
-			<description>Select the entity in which the label data is stored here. This property defines the reference between the context object and the label object. </description> 
-	</property>
-	<property key="tagAttrib" type="attribute" isPath="yes" pathType="referenceSet" required="true">
-		<caption>Caption Attribute</caption>
-		<category>Data source</category>
-		<description>The caption attribute of the label object, in which the user input is stored. </description>
-		<attributeTypes>
-		<attributeType name="String"/> 
-		</attributeTypes>
-	</property>
-	<property key="colorAttrib" type="attribute" isPath="yes" pathType="referenceSet" required="false">
-		<caption>Color Attribute</caption>
-		<category>Data source</category>
-		<description>The color attribute of the label object</description>
-		<attributeTypes>
-		<attributeType name="String"/> 
-		</attributeTypes>
-	</property>
-	<property key="sortAttr" type="attribute" entityProperty="tagAssoc" required="false">
-		<caption>Sort attribute</caption>
-		<category>Data source</category>
-		<description>The attribute to sort on.</description>
-		<attributeTypes>
-				<attributeType name="String"/>
-				<attributeType name="Integer"/>
-				<attributeType name="Currency"/>
-				<attributeType name="Enum"/>
-		</attributeTypes>
-	</property>
-<property key="sortOrder" type="enumeration" defaultValue="Asc">
-		<caption>Sort order</caption>
-		<category>Data source</category>
-		<description>The sort order.</description>
-		<enumerationValues>
-				<enumerationValue key="Asc">Ascending</enumerationValue>
-				<enumerationValue key="Desc">Descending</enumerationValue>
-		</enumerationValues>  
-</property>
-	<property key="tagConstraint" type="entityConstraint" required="false" entityProperty="tagAssoc">
-		<caption>Label constraint</caption>
-		<category>Data source</category>
-		<description>Optional constraint on suggested the label objects</description>
-	</property>
-	<property key="enableCreate" type="boolean" defaultValue='true'>
-		<caption>Enable create</caption>
-		<category>Behavior</category>
-		<description>Enable creating new labels.</description>
-	</property>
-	<property key="readOnly" type="boolean" defaultValue='false'>
-		<caption>Read Only</caption>
-		<category>Behavior</category>
-		<description>Make the widget read only.</description>
-	</property>
-	<property key="showAutoCompleteOnFocus" type="boolean" defaultValue='false'>
-		<caption>Show Labels</caption>
-		<category>Behavior</category>
-		<description>Show available labels on focus.</description>
-	</property>
-	<property key="tagLimit" type="integer" defaultValue='0'>
-		<caption>Tag limit</caption>
-		<category>Behavior</category>
-		<description>Limits the total number of tags that can be entered at once.</description>
-	</property>
-	<property key="autocompleteMinLength" type="integer" defaultValue='0'>
-		<caption>Autocomplete minimum length</caption>
-		<category>Behavior</category>
-		<description>The minimum length that should be entered before autocomplete starts.</description>
-	</property>
-	<property key="aftercreatemf" type="microflow" required="false">
-		<caption>After create label</caption>
-		<category>Interaction</category>
-		<description>This microflow is triggered after a new object is created, committed and added to the reference set.</description>
-		<returnType type="Void"/>
-	</property>
-	<property key="onchangemf" type="microflow" required="false">
-		<caption>On change microflow</caption>
-		<category>Interaction</category>
-		<description></description>
-		<returnType type="Void"/>
-	</property>
-	</properties>
+    <properties>
+        <property key="tagAssoc" type="entity" required="true" isPath="yes" pathType="referenceSet">
+            <caption>Label Object</caption>
+            <category>Data source</category>
+            <description>Select the entity in which the label data is stored here. This property defines the reference between the context object and the label object.
+            </description>
+        </property>
+        <property key="tagAttrib" type="attribute" isPath="yes" pathType="referenceSet" required="true">
+            <caption>Caption Attribute</caption>
+            <category>Data source</category>
+            <description>The caption attribute of the label object, in which the user input is stored.
+            </description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        <property key="colorAttrib" type="attribute" isPath="yes" pathType="referenceSet" required="false">
+            <caption>Color Attribute</caption>
+            <category>Data source</category>
+            <description>The color attribute of the label object</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        <property key="sortAttr" type="attribute" entityProperty="tagAssoc" required="false">
+            <caption>Sort attribute</caption>
+            <category>Data source</category>
+            <description>The attribute to sort on.</description>
+            <attributeTypes>
+                <attributeType name="String"/>
+                <attributeType name="Integer"/>
+                <attributeType name="Currency"/>
+                <attributeType name="Enum"/>
+            </attributeTypes>
+        </property>
+        <property key="sortOrder" type="enumeration" defaultValue="Asc">
+            <caption>Sort order</caption>
+            <category>Data source</category>
+            <description>The sort order.</description>
+            <enumerationValues>
+                <enumerationValue key="Asc">Ascending</enumerationValue>
+                <enumerationValue key="Desc">Descending</enumerationValue>
+            </enumerationValues>
+        </property>
+        <property key="tagConstraint" type="entityConstraint" required="false" entityProperty="tagAssoc">
+            <caption>Label constraint</caption>
+            <category>Data source</category>
+            <description>Optional constraint on suggested the label objects</description>
+        </property>
+        <property key="enableCreate" type="boolean" defaultValue='true'>
+            <caption>Enable create</caption>
+            <category>Behavior</category>
+            <description>Enable creating new labels.</description>
+        </property>
+        <property key="readOnly" type="boolean" defaultValue='false'>
+            <caption>Read Only</caption>
+            <category>Behavior</category>
+            <description>Make the widget read only.</description>
+        </property>
+        <property key="showAutoCompleteOnFocus" type="boolean" defaultValue='false'>
+            <caption>Show Labels</caption>
+            <category>Behavior</category>
+            <description>Show available labels on focus.</description>
+        </property>
+        <property key="tagLimit" type="integer" defaultValue='0'>
+            <caption>Tag limit</caption>
+            <category>Behavior</category>
+            <description>Limits the total number of tags that can be entered at once.</description>
+        </property>
+        <property key="autocompleteMinLength" type="integer" defaultValue='0'>
+            <caption>Autocomplete minimum length</caption>
+            <category>Behavior</category>
+            <description>The minimum length that should be entered before autocomplete starts.</description>
+        </property>
+        <property key="aftercreatemf" type="microflow" required="false">
+            <caption>After create label</caption>
+            <category>Interaction</category>
+            <description>This microflow is triggered after a new object is created, committed and added to the reference set.</description>
+            <returnType type="Void"/>
+        </property>
+        <property key="onchangemf" type="microflow" required="false">
+            <caption>On change microflow</caption>
+            <category>Interaction</category>
+            <description></description>
+            <returnType type="Void"/>
+        </property>
+    </properties>
 </widget>
-
