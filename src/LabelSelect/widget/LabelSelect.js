@@ -191,10 +191,8 @@ define([
                     params: {
                         applyto: "selection",
                         actionname: mf,
-                        guids: [obj.getGuid()]
-                    },
-                    store: {
-                        caller: this.mxform
+                        guids: [obj.getGuid()],
+                        origin: this.mxform
                     },
                     callback: function() {
                         if (cb && typeof cb === "function") {
@@ -272,7 +270,8 @@ define([
 
         _saveObject: function() {
             logger.debug(this.id + "._saveObject");
-            mx.data.save({
+            var method = (!mx.version || mx.version && parseInt(mx.version.split(".")[0]) < 7) ? "save" : "commit";
+            mx.data[method]({
                 mxobj: this._contextObj,
                 callback: lang.hitch(this, function() {
                     this._execMf(this._contextObj, this.onchangemf);
