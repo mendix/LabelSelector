@@ -185,7 +185,7 @@ define([
         },
 
         _execMf: function(obj, mf, cb) {
-            logger.debug(this.id + "._execMf");
+            logger.debug(this.id + "._execMf : ", mf);
             if (obj && mf) {
                 mx.data.action({
                     params: {
