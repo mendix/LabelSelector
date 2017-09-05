@@ -18,6 +18,9 @@ define([
     return declare("LabelSelect.widget.LabelSelect", [_WidgetBase, _TemplatedMixin], {
         templateString: widgetTemplate,
 
+        // Set in modeler
+        saveOnAddTag: true,
+
         _handles: null,
         _contextObj: null,
         _listBox: null,
@@ -269,6 +272,10 @@ define([
         },
 
         _saveObject: function() {
+            if (!this.saveOnAddTag) {
+                logger.debug(this.id + "._saveObject skipped, save on add tags disabled");
+                return;
+            }
             logger.debug(this.id + "._saveObject");
             var method = (!mx.version || mx.version && parseInt(mx.version.split(".")[0]) < 7) ? "save" : "commit";
             mx.data[method]({

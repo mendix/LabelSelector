@@ -1,12 +1,11 @@
 {
   "name": "LabelSelect",
-  "version": "4.4.1",
+  "version": "4.5.0",
   "description": "With this widget you can easily create/assign/remove objects (for example labels) to/from an object.",
   "license": "Apache-2",
   "author": "",
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "del": "^2.2.2",
     "gulp": "^3.9.1",

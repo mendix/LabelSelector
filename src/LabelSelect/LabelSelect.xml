@@ -79,6 +79,11 @@
             <category>Behavior</category>
             <description>The minimum length that should be entered before autocomplete starts.</description>
         </property>
+        <property key="saveOnAddTag" type="boolean" defaultValue="true">
+            <caption>Save context on adding tags</caption>
+            <category>Behavior</category>
+            <description>Save/commit context object on adding a tag. If you want to save this object yourself (for example on new objects), set this to No.</description>
+        </property>
         <property key="aftercreatemf" type="microflow" required="false">
             <caption>After create label</caption>
             <category>Interaction</category>
