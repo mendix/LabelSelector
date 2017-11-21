@@ -1,4 +1,4 @@
-# Label-selector
+# Label-selector [![Support](https://img.shields.io/badge/Mendix%20Support%3A-Platform-green.svg)](https://docs.mendix.com/community/app-store/app-store-content-support)
 
 With this widget you can easily create/assign/remove objects (for example labels) to/from an object.
 
