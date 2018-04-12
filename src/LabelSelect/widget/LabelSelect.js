@@ -74,15 +74,22 @@ define([
         _fetchCurrentLabels: function(callback) {
             logger.debug(this.id + "._fetchCurrentLabels");
             //fetch all referenced labels
-            var xpath = "//" + this._tagEntity + this.tagConstraint.replace(/\[\%CurrentObject\%\]/gi, this._contextObj.getGuid());
-            var filters = {};
+            var filters = {
+                attributes: [ this._tagAttribute ]
+            };
+            if (this._colorAttribute) {
+                filters.attributes.push(this._colorAttribute);
+            }
             if (this.sortAttr && this.sortOrder) {
                 filters.sort = [
                     [this.sortAttr, this.sortOrder]
                 ];
             }
+            var xpath = "//" + this._tagEntity + this.tagConstraint.replace(/\[\%CurrentObject\%\]/gi, this._contextObj.getGuid());
+            var refObjs = this._contextObj.get(this._refAttribute) || [];
             mx.data.get({
-                xpath: xpath,
+                xpath: !this._readOnly ? xpath : undefined,
+                guids: this._readOnly ? refObjs : undefined,
                 filter: filters,
                 callback: lang.hitch(this, this._processTags, callback),
                 error: lang.hitch(this, function(err) {
