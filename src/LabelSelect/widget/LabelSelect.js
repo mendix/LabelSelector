@@ -100,7 +100,7 @@ define([
 
             dojoArray.forEach(objs, function(tagObj, index) {
                 //clean up the text
-                var value = dom.escapeString(tagObj.get(this._tagAttribute));
+                var value = tagObj.get(this._tagAttribute);
                 //add tag to cache based on value
                 this._tagCache[value] = tagObj;
                 //check if this is a current tag
@@ -137,7 +137,7 @@ define([
                 color = null;
             //create a tag for all items
             dojoArray.forEach(currentTags, function(tagObj, index) {
-                value = dom.escapeString(tagObj.get(this._tagAttribute));
+                value = tagObj.get(this._tagAttribute);
                 color = (this._colorAttribute) ? dom.escapeString(tagObj.get(this._colorAttribute)) : null;
 
                 $("#" + this.id + "_ListBox").tagit("createTag", value, additionalClass, duringInitialization, color);
