@@ -21,7 +21,6 @@ define([
         // Set in modeler
         saveOnAddTag: true,
 
-        _handles: null,
         _contextObj: null,
         _listBox: null,
         _tagEntity: null,
@@ -31,13 +30,11 @@ define([
         _tagCache: null,
 
         _readOnly: false,
-
         _constructed: false,
 
         postCreate: function() {
-            logger.debug(this.id + ".postCreate");
+            logger.debug(this.id + ".postCreate :: 4.5.1");
             //set the variables:
-            this._handles = [];
             this._tagEntity = this.tagAssoc.split("/")[1];
             this._refAttribute = this.tagAssoc.split("/")[0];
             this._tagAttribute = this.tagAttrib.split("/")[2];
@@ -63,7 +60,6 @@ define([
 
                 this._contextObj = obj;
                 this._fetchCurrentLabels(callback);
-
                 this._resetSubscriptions();
             } else {
                 domStyle.set(this.domNode, "visibility", "hidden");
@@ -211,14 +207,10 @@ define([
 
         _resetSubscriptions: function() {
             logger.debug(this.id + "._resetSubscriptions");
-            var handle = null,
-                attrHandle = null,
-                validationHandle = null;
-
-            this._clearSubscriptions();
+            this.unsubscribeAll();
 
             if (this._contextObj) {
-                handle = this.subscribe({
+                this.subscribe({
                     guid: this._contextObj.getGuid(),
                     callback: function(guid) {
                         mx.data.get({
@@ -231,7 +223,7 @@ define([
 
                     }
                 });
-                attrHandle = this.subscribe({
+                this.subscribe({
                     guid: this._contextObj.getGuid(),
                     attr: this._refAttribute,
                     callback: lang.hitch(this, function(guid) {
@@ -245,15 +237,11 @@ define([
                     })
                 });
 
-                validationHandle = this.subscribe({
+                this.subscribe({
                     guid: this._contextObj.getGuid(),
                     val: true,
                     callback: lang.hitch(this, this._handleValidation)
                 });
-
-                this._handles.push(handle);
-                this._handles.push(attrHandle);
-                this._handles.push(validationHandle);
             }
         },
 
@@ -372,21 +360,6 @@ define([
             });
 
             this.domNode.appendChild(this._alertdiv);
-        },
-
-        _clearSubscriptions: function() {
-            logger.debug(this.id + "._clearSubscriptions");
-            if (this._handles && this._handles.length && this._handles.length > 0) {
-                dojoArray.forEach(this._handles, lang.hitch(this, function(handle) {
-                    this.unsubscribe(handle);
-                }));
-                this._handles = [];
-            }
-        },
-
-        uninitialize: function() {
-            logger.debug(this.id + ".uninitialize");
-            this._clearSubscriptions();
         },
 
         _executeCallback: function (cb, from) {
