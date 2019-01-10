@@ -8,7 +8,7 @@ define([
     "dojo/dom-construct",
     "dojo/_base/array",
     "dojo/_base/lang",
-    "LabelSelect/lib/jquery-1.11.2",
+    "LabelSelect/lib/jquery",
     "dojo/text!LabelSelect/widget/template/LabelSelect.html"
 ], function(declare, _WidgetBase, _TemplatedMixin, dom, domClass, domStyle, domConstruct, dojoArray, lang, _jQuery, widgetTemplate) {
     "use strict";
