@@ -190,9 +190,9 @@ define([
                     params: {
                         applyto: "selection",
                         actionname: mf,
-                        guids: [obj.getGuid()],
-                        origin: this.mxform
+                        guids: [obj.getGuid()]
                     },
+                    origin: this.mxform,
                     callback: function() {
                         if (cb && typeof cb === "function") {
                             cb();
