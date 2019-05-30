@@ -81,8 +81,11 @@ define([
                     [this.sortAttr, this.sortOrder]
                 ];
             }
+            var xpath = "//" + this._tagEntity + this.tagConstraint.replace(/\[\%CurrentObject\%\]/gi, this._contextObj.getGuid());
+            var refObjs = this._contextObj.get(this._refAttribute) || [];
             mx.data.get({
-                xpath: xpath,
+                xpath: !this._readOnly ? xpath : undefined,
+                guids: this._readOnly ? refObjs : undefined,
                 filter: filters,
                 callback: lang.hitch(this, this._processTags, callback),
                 error: lang.hitch(this, function(err) {
