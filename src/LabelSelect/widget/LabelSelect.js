@@ -55,16 +55,16 @@ define([
                 this._constructed = true;
             }
 
+            this._resetSubscriptions();
             if (obj) {
                 domStyle.set(this.domNode, "visibility", "visible");
 
                 this._contextObj = obj;
                 this._fetchCurrentLabels(callback);
-                this._resetSubscriptions();
             } else {
                 domStyle.set(this.domNode, "visibility", "hidden");
-                this._executeCallback(callback, "update");
             }
+            this._executeCallback(callback, "update");
         },
 
         _fetchCurrentLabels: function(callback) {
