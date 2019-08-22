@@ -96,5 +96,10 @@
             <description></description>
             <returnType type="Void"/>
         </property>
+        <property key="allowSpaces" type="boolean" defaultValue='false'>
+            <caption>Allow Spaces</caption>
+            <category>Behavior</category>
+            <description>Allow spaces when searching for tags.</description>
+        </property>
     </properties>
 </widget>
