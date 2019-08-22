@@ -11198,6 +11198,15 @@ return isNaN(t)?d:t},g=p(l[0]),m=Math.max(g,p(l[1]||"")),g=a?Math.max(g,a.getFul
             // created for tag-it.
             tabIndex: null,
 
+            // Search for patterns within all the autocomplete tags as opposed
+            // to just the start of the tag.  By default (value set to false)
+            // it will only search the start
+
+            // By default (value set to false) perform the autocomplete by
+            // matching just the start of each available tag or by matching
+            // within any part of the tag
+            autocompleteMatchAnywhere: false,
+
             // Event callbacks.
             beforeTagAdded      : null,
             afterTagAdded       : null,
@@ -11254,9 +11263,11 @@ return isNaN(t)?d:t},g=p(l[0]),m=Math.max(g,p(l[1]||"")),g=a?Math.max(g,a.getFul
                 this.options.autocomplete.source = function(search, showChoices) {
                     var filter = search.term.toLowerCase();
                     var choices = $.grep(this.options.availableTags, function(element) {
-                        // Only match autocomplete options that begin with the search term.
-                        // (Case insensitive.)
-                        return (element.toLowerCase().indexOf(filter) === 0);
+                        if (that.options.autocompleteMatchAnywhere) {
+                            return (element.toLowerCase().search(filter) !== -1);
+                        } else {
+                            return (element.toLowerCase().indexOf(filter) === 0);
+                        }
                     });
                     if (!this.options.allowDuplicates) {
                         choices = this._subtractArray(choices, this.assignedTags());
