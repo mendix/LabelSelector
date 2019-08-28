@@ -7,7 +7,7 @@ The implementation is based on the Tag-it library
 Background colors to labels can be set, and the text will in contrast of it background by use of the class 'text-normal' or 'text-contrast'
 
 ## Contributing
-For more information on contributing to this repository visit [Contributing to a GitHub repository] (https://world.mendix.com/display/howto50/Contributing+to+a+GitHub+repository)
+For more information on contributing to this repository visit [Contributing to a GitHub repository] (https://docs.mendix.com/howto/collaboration-requirements-management/contribute-to-a-github-repository)
 
 ##Typical Usage Scenario
 * Quickly adjust reference sets.
