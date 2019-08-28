@@ -54,12 +54,10 @@ define([
                 domConstruct.place(this._listBox, this.domNode);
                 this._constructed = true;
             }
-
+            this._contextObj = obj;
             this._resetSubscriptions();
             if (obj) {
                 domStyle.set(this.domNode, "visibility", "visible");
-
-                this._contextObj = obj;
                 this._fetchCurrentLabels(callback);
             } else {
                 domStyle.set(this.domNode, "visibility", "hidden");
