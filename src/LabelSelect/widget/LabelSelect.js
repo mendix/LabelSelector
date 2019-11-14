@@ -31,6 +31,7 @@ define([
 
         _readOnly: false,
         _constructed: false,
+        _allowSpaces: false,
 
         postCreate: function() {
             logger.debug(this.id + ".postCreate :: 4.5.1");
@@ -42,6 +43,7 @@ define([
             this._tagCache = {}; //we need this to set references easily.
 
             this._readOnly = this.readOnly || this.get("disabled") || this.readonly;
+            this._allowSpaces = this.allowSpaces;
         },
 
         update: function(obj, callback) {
@@ -292,8 +294,7 @@ define([
                 showAutocompleteOnFocus: this.showAutoCompleteOnFocus,
                 removeConfirmation: false,
                 caseSensitive: true,
-                allowDuplicates: false,
-                allowSpaces: false,
+                allowDuplicates: false,                
                 readOnly: this._readOnly,
                 tagLimit: this.tagLimit > 0 ? this.tagLimit : null,
                 singleField: false,
@@ -301,7 +302,8 @@ define([
                 singleFieldNode: null,
                 tabIndex: null,
                 placeholderText: null,
-
+                allowSpaces: this._allowSpaces,
+                
                 afterTagAdded: lang.hitch(this, function(event, ui) {
                     this._clearValidations();
                     //fetch tag from cache
