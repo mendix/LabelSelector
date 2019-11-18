@@ -1,0 +1,1 @@
+This is a custom version of the label selector widget to allow toggling case sensitivity for labels.

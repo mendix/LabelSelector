@@ -41,7 +41,7 @@ gulp.task("clean", function () {
 
 gulp.task("compress", ["clean"], function () {
     return gulp.src("src/**/*")
-        .pipe(zip(pkg.name + ".mpk"))
+        .pipe(zip("custom." + pkg.name + ".mpk"))
         .pipe(gulp.dest(paths.TEST_WIDGETS_FOLDER))
         .pipe(gulp.dest("dist"));
 });

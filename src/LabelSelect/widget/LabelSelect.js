@@ -291,7 +291,7 @@ define([
                 enableCreate: this.enableCreate,
                 showAutocompleteOnFocus: this.showAutoCompleteOnFocus,
                 removeConfirmation: false,
-                caseSensitive: true,
+                caseSensitive: this.enableCaseSensitive,
                 allowDuplicates: false,
                 allowSpaces: false,
                 readOnly: this._readOnly,
