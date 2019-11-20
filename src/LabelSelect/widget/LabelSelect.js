@@ -165,7 +165,7 @@ define([
                 entity: this._tagEntity,
                 callback: lang.hitch(this, function(obj) {
                     //set the value
-                    obj.set(this._tagAttribute, value);
+                    this.enableCapitals ? obj.set(this._tagAttribute, value) : obj.set(this._tagAttribute, value.toLowerCase());
                     //save
                     mx.data.commit({
                         mxobj: obj,
@@ -291,7 +291,7 @@ define([
                 enableCreate: this.enableCreate,
                 showAutocompleteOnFocus: this.showAutoCompleteOnFocus,
                 removeConfirmation: false,
-                caseSensitive: this.enableCaseSensitive,
+                enableCapitals: this.enableCapitals,
                 allowDuplicates: false,
                 allowSpaces: false,
                 readOnly: this._readOnly,

@@ -59,10 +59,10 @@
             <category>Behavior</category>
             <description>Enable creating new labels.</description>
         </property>
-        <property key="enableCaseSensitive" type="boolean" defaultValue='true'>
-            <caption>Enable case sensitivity</caption>
+        <property key="enableCapitals" type="boolean" defaultValue='true'>
+            <caption>Enable capital characters</caption>
             <category>Behavior</category>
-            <description>Enable case sensitive labels.</description>
+            <description>Enable capital characters in labels.</description>
         </property>
         <property key="readOnly" type="boolean" defaultValue='false'>
             <caption>Read Only</caption>
