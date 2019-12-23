@@ -179,7 +179,10 @@ define([
                             } else {
                                 console.log(this.id + " - please add an after create mf to commit the object, otherwise ui is incorrectly displayed.");
                             }
-                        })
+                        }),
+                        error: function(e) {
+                            this._fetchCurrentLabels();
+                        }, 
                     }, this);
                 }),
                 error: function(e) {
@@ -277,6 +280,7 @@ define([
                     this._execMf(this._contextObj, this.onchangemf);
                 })
             }, this);
+            this._renderCurrentTags();
         },
 
         _setOptions: function(tagArray) {
@@ -305,7 +309,7 @@ define([
                 afterTagAdded: lang.hitch(this, function(event, ui) {
                     this._clearValidations();
                     //fetch tag from cache
-                    var tagObj = this._tagCache[ui.tagLabel];
+                    var tagObj = this.enableCapitals ? this._tagCache[ui.tagLabel] : this._tagCache[ui.tagLabel.toLowerCase()];
 
                     if (tagObj) {
                         //check if already a reference
@@ -363,7 +367,6 @@ define([
                 "class": "alert alert-danger",
                 innerHTML: msg
             });
-
             this.domNode.appendChild(this._alertdiv);
         },
 
