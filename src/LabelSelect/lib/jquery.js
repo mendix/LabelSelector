@@ -11558,7 +11558,7 @@ return isNaN(t)?d:t},g=p(l[0]),m=Math.max(g,p(l[1]||"")),g=a?Math.max(g,a.getFul
 
         createTag: function(value, additionalClass, duringInitialization, color) {
             var that = this;
-            var specialCharacters = /[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+            var specialCharacters = /[ !@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]/;
 
             value = this.options.enableCapitals ? $.trim(value) : $.trim(value).toLowerCase();
 
@@ -11566,7 +11566,7 @@ return isNaN(t)?d:t},g=p(l[0]),m=Math.max(g,p(l[1]||"")),g=a?Math.max(g,a.getFul
                 value = this.options.preprocessTag(value);
             }
 
-            if (value === '' || value.length < 3 || specialCharacters.test(value)) {
+            if (value === '' || value.length < 2 || specialCharacters.test(value)) {
                 return false;
             }
 
