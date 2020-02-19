@@ -1,3 +1,10 @@
+/**
+ * IMPORTANT NOTES (by @diego-antonelli)
+ * 1 - JQuery 3.4.1 deprecated few methods of JQueryUI like .andSelf, binding and few other, to fix this problem I added JQuery Migrate 3.0.0
+ * 2 - Updating JQuery UI to a higher version than 1.10.4 started to throw few dom errors and designs were not nice
+ * 3 - TagIT uses JQuery UI to call events and calculate positions
+ */
+
 /*!
  * jQuery JavaScript Library v3.4.1
  * https://jquery.com/
