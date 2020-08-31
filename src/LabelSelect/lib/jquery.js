@@ -10650,7 +10650,8 @@
 
 // Set to false to disable traces that appear with warnings
 	if ( jQuery.migrateTrace === undefined ) {
-		jQuery.migrateTrace = true;
+		jQuery.migrateTrace = false; // disable messages in the console
+		jQuery.migrateMute = true; 		
 	}
 
 // Forget any warnings we've already given; public
