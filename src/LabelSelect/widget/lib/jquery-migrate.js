@@ -258,7 +258,7 @@
                     // parseFloat NaNs numeric-cast false positives ("")
                     // ...but misinterprets leading-number strings, e.g. hex literals ("0x...")
                     // subtraction forces infinities to NaN
-                    !isNaN( obj - parseFloat( obj ) );
+                    !Number.isNaN( obj - parseFloat( obj ) );
             },
             "jQuery.isNumeric() is deprecated"
         );
