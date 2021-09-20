@@ -8,12 +8,14 @@ define([
     "dojo/dom-construct",
     "dojo/_base/array",
     "dojo/_base/lang",
-    "LabelSelect/lib/jquery",
-    "dojo/text!LabelSelect/widget/template/LabelSelect.html"
-], function(declare, _WidgetBase, _TemplatedMixin, dom, domClass, domStyle, domConstruct, dojoArray, lang, _jQuery, widgetTemplate) {
+    "dojo/text!./template/LabelSelect.html",
+    "jquery"
+], function(declare, _WidgetBase, _TemplatedMixin, dom, domClass, domStyle, domConstruct, dojoArray, lang, widgetTemplate, _jQuery) {
     "use strict";
 
-    var $ = _jQuery.noConflict(true);
+    window.jQuery = window.$ = _jQuery;
+
+    require(["./lib/jquery-migrate", "jquery-ui", "jquery-ui/ui/widgets/autocomplete", "jquery-ui/ui/widgets/menu", "jquery-ui/ui/widgets/selectable", "tag-it"]);
 
     return declare("LabelSelect.widget.LabelSelect", [_WidgetBase, _TemplatedMixin], {
         templateString: widgetTemplate,
@@ -375,5 +377,3 @@ define([
         }
     });
 });
-
-require(["LabelSelect/widget/LabelSelect"]);
