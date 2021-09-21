@@ -20,7 +20,7 @@ module.exports = {
         publicPath: "/widgets/"
     },
     devtool: false,
-    mode: "development",
+    mode: "production",
     externals: [ /^mxui\/|^mendix\/|^dojo\/|^dijit\// ],
     plugins: [
         new webpack.LoaderOptionsPlugin({ debug: true }),
