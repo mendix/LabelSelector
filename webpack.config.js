@@ -25,7 +25,7 @@ module.exports = {
     plugins: [
         new webpack.LoaderOptionsPlugin({ debug: true }),
         new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: "dist/tmp" }),
-        new CopyWebpackPlugin([ {context: "src", from: "**/*.{xml,css,html,png}", debug: true} ], { copyUnmodified: true }),
+        new CopyWebpackPlugin([ {context: "src", from: "**/*.{xml,css,html,png,gif}", debug: true} ], { copyUnmodified: true }),
         new ZipPlugin({ path: `../../${widgetVersion}`, filename: widgetName, extension: "mpk" })
     ]
 };
