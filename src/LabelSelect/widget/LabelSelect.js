@@ -288,7 +288,7 @@ define([
                 availableTags: tagArray,
                 autocomplete: {
                     delay: 0,
-                    minLength: this.autocompleteMinLength
+                    minLength: 2147483647
                 },
                 enableCreate: this.enableCreate,
                 showAutocompleteOnFocus: this.showAutoCompleteOnFocus,
