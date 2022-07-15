@@ -15,7 +15,7 @@ define([
 
     window.jQuery = window.$ = _jQuery;
 
-    require(["./lib/jquery-migrate", "jquery-ui", "jquery-ui/ui/widgets/autocomplete", "jquery-ui/ui/widgets/menu", "jquery-ui/ui/widgets/selectable", "tag-it"]);
+    require(["./lib/jquery-migrate", "jquery-ui", "jquery-ui/ui/widgets/autocomplete", "jquery-ui/ui/widgets/menu", "jquery-ui/ui/widgets/selectable", "./lib/tag-it",]);
 
     return declare("LabelSelect.widget.LabelSelect", [_WidgetBase, _TemplatedMixin], {
         templateString: widgetTemplate,
