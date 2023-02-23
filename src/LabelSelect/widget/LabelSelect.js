@@ -35,7 +35,7 @@ define([
         _constructed: false,
 
         postCreate: function() {
-            mx.logger.debug(this.id + ".postCreate :: 4.5.1");
+            console.debug(this.id + ".postCreate :: 4.5.1");
             //set the variables:
             this._tagEntity = this.tagAssoc.split("/")[1];
             this._refAttribute = this.tagAssoc.split("/")[0];
@@ -47,7 +47,7 @@ define([
         },
 
         update: function(obj, callback) {
-            mx.logger.debug(this.id + ".update");
+            console.debug(this.id + ".update");
 
             if (!this._constructed) {
                 this._listBox = domConstruct.create("ul", {
@@ -68,7 +68,7 @@ define([
         },
 
         _fetchCurrentLabels: function(callback) {
-            mx.logger.debug(this.id + "._fetchCurrentLabels");
+            console.debug(this.id + "._fetchCurrentLabels");
             //fetch all referenced labels
             var filters = {
                 attributes: [ this._tagAttribute ]
@@ -96,7 +96,7 @@ define([
         },
 
         _processTags: function(callback, objs) {
-            mx.logger.debug(this.id + "._processTags");
+            console.debug(this.id + "._processTags");
             var refObjs = this._contextObj.get(this._refAttribute),
                 tagArray = [],
                 currentTags = [];
@@ -121,7 +121,7 @@ define([
         },
 
         _renderCurrentTags: function(currentTags, callback) {
-            mx.logger.debug(this.id + "._renderCurrentTags");
+            console.debug(this.id + "._renderCurrentTags");
             //we"re not using the plugin function "remove all" because we don"t want to remove references
             var items = this._listBox.getElementsByTagName("li");
             while (items.length > 0) {
@@ -150,18 +150,18 @@ define([
         },
 
         _startTagger: function(options) {
-            mx.logger.debug(this.id + "._startTagger");
+            console.debug(this.id + "._startTagger");
             if (options) {
                 $("#" + this.id + "_ListBox").tagit(options);
             } else {
                 //fallback
-                mx.logger.warn("No options found, running defaults");
+                console.warn("No options found, running defaults");
                 $("#" + this.id + "_ListBox").tagit();
             }
         },
 
         _createTagobject: function(value) {
-            mx.logger.debug(this.id + "._createTagobject");
+            console.debug(this.id + "._createTagobject");
             //create a new tag
             mx.data.create({
                 entity: this._tagEntity,
@@ -185,13 +185,13 @@ define([
                     }, this);
                 }),
                 error: function(e) {
-                    mx.logger.error("Error creating object: " + e);
+                    console.error("Error creating object: " + e);
                 }
             }, this);
         },
 
         _execMf: function(obj, mf, cb) {
-            mx.logger.debug(this.id + "._execMf : ", mf);
+            console.debug(this.id + "._execMf : ", mf);
             if (obj && mf) {
                 mx.data.action({
                     params: {
@@ -206,14 +206,14 @@ define([
                         }
                     },
                     error: function(e) {
-                        mx.logger.error("Error running Microflow: " + e);
+                        console.error("Error running Microflow: " + e);
                     }
                 }, this);
             }
         },
 
         _resetSubscriptions: function() {
-            mx.logger.debug(this.id + "._resetSubscriptions");
+            console.debug(this.id + "._resetSubscriptions");
             this.unsubscribeAll();
 
             if (this._contextObj) {
@@ -253,7 +253,7 @@ define([
         },
 
         _isReference: function(guid) {
-            mx.logger.debug(this.id + "._isReference");
+            console.debug(this.id + "._isReference");
             var isRef = false,
                 refs = this._contextObj.getReferences(this._refAttribute);
 
@@ -268,10 +268,10 @@ define([
 
         _saveObject: function() {
             if (!this.saveOnAddTag) {
-                mx.logger.debug(this.id + "._saveObject skipped, save on add tags disabled");
+                console.debug(this.id + "._saveObject skipped, save on add tags disabled");
                 return;
             }
-            mx.logger.debug(this.id + "._saveObject");
+            console.debug(this.id + "._saveObject");
             var method = (!mx.version || mx.version && parseInt(mx.version.split(".")[0]) < 7) ? "save" : "commit";
             mx.data[method]({
                 mxobj: this._contextObj,
@@ -282,7 +282,7 @@ define([
         },
 
         _setOptions: function(tagArray) {
-            mx.logger.debug(this.id + "._setOptions");
+            console.debug(this.id + "._setOptions");
             //TODO: allow users to set options
             var options = {
                 availableTags: tagArray,
@@ -318,7 +318,7 @@ define([
                     } else if (this.enableCreate) {
                         this._createTagobject(ui.tagLabel);
                     } else {
-                        mx.logger.warn("No Tag found for value: " + ui.tagLabel);
+                        console.warn("No Tag found for value: " + ui.tagLabel);
                     }
                 }),
 
@@ -330,7 +330,7 @@ define([
                         this._contextObj.removeReferences(this._refAttribute, [tagObj.getGuid()]);
                         this._saveObject();
                     } else {
-                        mx.logger.warn("No Tag found for value: " + ui.tagLabel);
+                        console.warn("No Tag found for value: " + ui.tagLabel);
                     }
                 })
             };
@@ -338,7 +338,7 @@ define([
         },
 
         _handleValidation: function(validations) {
-            mx.logger.debug(this.id + "._handleValidation");
+            console.debug(this.id + "._handleValidation");
             this._clearValidations();
 
             var val = validations[0],
@@ -355,12 +355,12 @@ define([
         },
 
         _clearValidations: function() {
-            mx.logger.debug(this.id + "._clearValidations");
+            console.debug(this.id + "._clearValidations");
             domConstruct.destroy(this._alertdiv);
         },
 
         _addValidation: function(msg) {
-            mx.logger.debug(this.id + "._addValidation");
+            console.debug(this.id + "._addValidation");
             this._alertdiv = domConstruct.create("div", {
                 "class": "alert alert-danger",
                 innerHTML: msg
@@ -370,7 +370,7 @@ define([
         },
 
         _executeCallback: function (cb, from) {
-            mx.logger.debug(this.id + "._executeCallback" + (from ? " from " + from : ""));
+            console.debug(this.id + "._executeCallback" + (from ? " from " + from : ""));
             if (cb && typeof cb === "function") {
                 cb();
             }
