@@ -13,8 +13,6 @@ define([
 ], function(declare, _WidgetBase, _TemplatedMixin, dom, domClass, domStyle, domConstruct, dojoArray, lang, widgetTemplate, _jQuery) {
     "use strict";
 
-    window.jQuery = window.$ = _jQuery;
-
     require(["./lib/jquery-migrate", "jquery-ui", "jquery-ui/ui/widgets/autocomplete", "jquery-ui/ui/widgets/menu", "jquery-ui/ui/widgets/selectable", "./lib/tag-it",]);
 
     return declare("LabelSelect.widget.LabelSelect", [_WidgetBase, _TemplatedMixin], {
@@ -138,7 +136,7 @@ define([
                 value = tagObj.get(this._tagAttribute);
                 color = (this._colorAttribute) ? dom.escapeString(tagObj.get(this._colorAttribute)) : null;
 
-                $("#" + this.id + "_ListBox").tagit("createTag", value, additionalClass, duringInitialization, color);
+                _jQuery("#" + this.id + "_ListBox").tagit("createTag", value, additionalClass, duringInitialization, color);
             }, this);
 
             this._executeCallback(callback, "_renderCurrentTags");
@@ -146,11 +144,11 @@ define([
 
         _startTagger: function(options) {
             if (options) {
-                $("#" + this.id + "_ListBox").tagit(options);
+                _jQuery("#" + this.id + "_ListBox").tagit(options);
             } else {
                 //fallback
                 console.warn("No options found, running defaults");
-                $("#" + this.id + "_ListBox").tagit();
+                _jQuery("#" + this.id + "_ListBox").tagit();
             }
         },
 
