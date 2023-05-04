@@ -17,7 +17,8 @@ module.exports = {
         filename: `${widgetName}/widget/[name].js`,
         chunkFilename: `${widgetName}/widget/${widgetName}[id].js`,
         libraryTarget: "amd",
-        publicPath: "/widgets/"
+        publicPath: "/widgets/",
+        jsonpFunction: "label_selector_jsonp"
     },
     devtool: false,
     mode: "production",
@@ -26,6 +27,10 @@ module.exports = {
         new webpack.LoaderOptionsPlugin({ debug: true }),
         new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: "dist/tmp" }),
         new CopyWebpackPlugin([ {context: "src", from: "**/*.{xml,css,html,png,gif}", debug: true} ], { copyUnmodified: true }),
-        new ZipPlugin({ path: `../../${widgetVersion}`, filename: widgetName, extension: "mpk" })
+        new ZipPlugin({ path: `../../${widgetVersion}`, filename: widgetName, extension: "mpk" }),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
+        })
     ]
 };
