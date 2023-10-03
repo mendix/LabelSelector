@@ -64,6 +64,10 @@ define([
         },
 
         _fetchCurrentLabels: function(callback) {
+            if (!this._contextObj) {
+                this._executeCallback(callback, "_fetchCurrentLabels has empty context object");
+                return;
+            }
             //fetch all referenced labels
             var filters = {
                 attributes: [ this._tagAttribute ]
