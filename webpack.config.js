@@ -17,7 +17,7 @@ module.exports = {
         filename: `${widgetName}/widget/[name].js`,
         chunkFilename: `${widgetName}/widget/${widgetName}[id].js`,
         libraryTarget: "amd",
-        publicPath: "/widgets/",
+        publicPath: "widgets/",
         jsonpFunction: "label_selector_jsonp"
     },
     devtool: false,
